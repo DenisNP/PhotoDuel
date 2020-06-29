@@ -33,6 +33,7 @@ namespace PhotoDuel.Services
             );
 
             var message = "";
+            // check if voting or load duel by link
             if (!string.IsNullOrEmpty(request.DuelId))
             {
                 var reqDuel = _dbService.Collection<Duel>("duels").FirstOrDefault(d => d.Id == request.DuelId);
@@ -40,10 +41,12 @@ namespace PhotoDuel.Services
                 {
                     if (request.Vote == Vote.None)
                     {
+                        // conflicted current duel
                         if (currentDuel != null && currentDuel.Id != reqDuel.Id)
                         {
-                            message = "У вас уже есть текущая дуэль";
+                            message = "Сначала завершите текущую дуэль";
                         }
+                        // set requested duel as current
                         else
                         {
                             currentDuel = reqDuel;
@@ -51,6 +54,7 @@ namespace PhotoDuel.Services
                     }
                     else
                     {
+                        // try to vote for requested duel
                         if (_duelService.Vote(reqDuel, user.ToMeta(), request.Vote))
                         {
                             message = "Ваш голос засчитан";
@@ -62,6 +66,7 @@ namespace PhotoDuel.Services
                         }
                     }
                 }
+                // requested duel not found
                 else
                 {
                     message = "Дуэли по этой ссылке больше нет";
@@ -122,10 +127,12 @@ namespace PhotoDuel.Services
             var winners = new List<Winner>();
             foreach (var duel in duels)
             {
+                // add creator to pantheon if he is winner or there is a tie with non-zero votes 
                 if (duel.Creator.Voters.Count > 0 && duel.Creator.Voters.Count >= duel.Opponent.Voters.Count)
                 {
                     winners.Add(new Winner(duel.Creator, duel.CategoryId, duel.ChallengeId));
                 }
+                // add opponent to pantheon if he is winner or there is a tie with non-zero votes 
                 if (duel.Opponent.Voters.Count > 0 && duel.Opponent.Voters.Count >= duel.Creator.Voters.Count)
                 {
                     winners.Add(new Winner(duel.Opponent, duel.CategoryId, duel.ChallengeId));
