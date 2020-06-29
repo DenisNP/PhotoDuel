@@ -74,6 +74,17 @@ namespace PhotoDuel.Controllers
             );
         }
         
+        [HttpPost("/report")]
+        public Task Report()
+        {
+            return HandleRequest<DuelIdRequest, OkResponse>(
+                request => new OkResponse
+                {
+                    Ok = _duelService.ReportDuel(request.UserId, request.DuelId)
+                }
+            );
+        }
+        
         private Task HandleRequest<TRequest, TResponse>(Func<TRequest, TResponse> handler) where TRequest : BaseRequest
         {
             using var reader = new StreamReader(Request.Body);

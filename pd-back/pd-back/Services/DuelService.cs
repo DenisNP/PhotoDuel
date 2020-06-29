@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using PhotoDuel.Models;
-using PhotoDuel.Models.Web;
 using PhotoDuel.Models.Web.Request;
 using PhotoDuel.Models.Web.Response;
 
@@ -147,6 +146,30 @@ namespace PhotoDuel.Services
             }
 
             return false;
+        }
+
+        public bool ReportDuel(string userId, string duelId)
+        {
+            // load user
+            var user = _dbService.Collection<User>("users").FirstOrDefault(u => u.Id == userId);
+            if (user == null) throw new InvalidOperationException("User does not exist");
+            // load duel
+            var duel = _dbService.Collection<Duel>("duels").FirstOrDefault(d => d.Id == duelId);
+            if (duel == null) return false;
+            
+            // create new report
+            var report = new Report
+            {
+                Id = Utils.RandomString(16),
+                Duel = duel,
+                Reporter = user.ToMeta(),
+                Time = Utils.Now()
+            };
+            
+            // write to db
+            _dbService.UpdateAsync<Report>("reports", report);
+
+            return true;
         }
     }
 }
