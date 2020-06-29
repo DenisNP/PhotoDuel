@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using PhotoDuel.Models;
 using PhotoDuel.Models.Web;
+using PhotoDuel.Models.Web.Request;
+using PhotoDuel.Models.Web.Response;
 
 namespace PhotoDuel.Services
 {
@@ -18,7 +20,7 @@ namespace PhotoDuel.Services
         public bool Vote(Duel duel, UserMeta voter, Vote vote)
         {
             // this method should only been invoked with actual vote selected
-            if (vote == Models.Web.Vote.None) throw new InvalidOperationException();
+            if (vote == Models.Web.Request.Vote.None) throw new InvalidOperationException();
             // user can only vote for running duel
             if (duel.Status != DuelStatus.Started) return false;
             // user cannot vote if he participates is duel
@@ -27,7 +29,7 @@ namespace PhotoDuel.Services
             if (duel.Creator.Voters.Concat(duel.Opponent.Voters).Any(v => v.Id == voter.Id)) return false;
 
             // vote for creator
-            if (vote == Models.Web.Vote.Creator)
+            if (vote == Models.Web.Request.Vote.Creator)
             {
                 duel.Creator.Voters.Add(voter);
                 _dbService.PushAsync<Duel, UserMeta>("duels", duel.Id, d => d.Creator.Voters, voter);
@@ -98,16 +100,18 @@ namespace PhotoDuel.Services
             
             // load duel
             var duel = _dbService.Collection<Duel>("duels").FirstOrDefault(d => d.Id == request.DuelId);
-            if (duel == null) throw new InvalidOperationException("Duel does not exist");
 
             // check if duel already has opponent
-            if (duel.Opponent != null)
+            if (duel == null || duel.Opponent != null)
             {
                 return new DuelResponse
                 {
                     Duel = null
                 };
             }
+            
+            // check if own
+            if (duel.Creator.User.Id == request.UserId) throw new InvalidOperationException("This is your own duel");
 
             // create new duel object
             duel.Opponent = new Duellist
@@ -130,6 +134,19 @@ namespace PhotoDuel.Services
             {
                 Duel = duel
             };
+        }
+
+        public bool DeleteDuel(string userId, string duelId)
+        {
+            var duel = _dbService.Collection<Duel>("duels").FirstOrDefault(d => d.Id == duelId);
+            
+            if (duel != null && duel.Creator.User.Id == userId && duel.Status == DuelStatus.Created)
+            {
+                _dbService.DeleteAsync<Duel>("duels", duel.Id);
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace PhotoDuel.Models.Web
+﻿namespace PhotoDuel.Models.Web.Response
 {
     public class DuelResponse
     {

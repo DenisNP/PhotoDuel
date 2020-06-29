@@ -60,5 +60,11 @@ namespace PhotoDuel.Services
             var filter = Builders<TDocument>.Filter.Eq(x => x.Id, docId);
             _db.GetCollection<TDocument>(collection).FindOneAndUpdateAsync(filter, update);
         }
+
+        public void DeleteAsync<T>(string collection, string id) where T : IIdentity
+        {
+            var filter = Builders<T>.Filter.Eq(x => x.Id, id);
+            _db.GetCollection<T>(collection).DeleteOneAsync(filter);
+        }
     }
 }

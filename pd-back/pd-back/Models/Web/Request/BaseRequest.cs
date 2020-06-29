@@ -1,4 +1,4 @@
-﻿namespace PhotoDuel.Models.Web
+﻿namespace PhotoDuel.Models.Web.Request
 {
     public class BaseRequest
     {

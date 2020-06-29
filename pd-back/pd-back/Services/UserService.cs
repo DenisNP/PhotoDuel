@@ -2,6 +2,8 @@
 using System.Linq;
 using PhotoDuel.Models;
 using PhotoDuel.Models.Web;
+using PhotoDuel.Models.Web.Request;
+using PhotoDuel.Models.Web.Response;
 
 namespace PhotoDuel.Services
 {
