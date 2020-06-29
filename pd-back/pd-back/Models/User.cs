@@ -3,6 +3,16 @@
     public class User : UserMeta
     {
         public int Rating { get; set; }
+        
+        public UserMeta ToMeta()
+        {
+            return new UserMeta
+            {
+                Id = Id,
+                Name = Name,
+                Photo = Photo
+            };
+        }
     }
     
     public class UserMeta : IIdentity

@@ -15,6 +15,7 @@ namespace PhotoDuel
 
             services.AddSingleton<IDbService, MongoService>();
             services.AddScoped<UserService>();
+            services.AddScoped<DuelService>();
         }
 
         public void Configure(IApplicationBuilder app, IDbService dbService, ILogger<Startup> logger)

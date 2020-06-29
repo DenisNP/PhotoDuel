@@ -49,7 +49,7 @@ namespace PhotoDuel.Controllers
             _logger.LogInformation($"REQUEST:\n{body}");
             var request = JsonConvert.DeserializeObject<InitRequest>(body, _converterSettings);
 
-            var user = _userService.Load(request);
+            var user = _userService.Init(request);
             var result = JsonConvert.SerializeObject(user, _converterSettings);
             
             _logger.LogInformation($"RESPONSE:\n{result}");

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -45,6 +47,18 @@ namespace PhotoDuel.Services
         {
             var filter = Builders<T>.Filter.Eq(x => x.Id, document.Id);
             _db.GetCollection<T>(collection).ReplaceOneAsync(filter, document, new ReplaceOptions {IsUpsert = true});
+        }
+
+        public void PushAsync<TDocument, TItem>(
+            string collection,
+            string docId,
+            Expression<Func<TDocument, IEnumerable<TItem>>> expression,
+            TItem value
+        ) where TDocument : IIdentity
+        {
+            var update = Builders<TDocument>.Update.Push(expression, value);
+            var filter = Builders<TDocument>.Filter.Eq(x => x.Id, docId);
+            _db.GetCollection<TDocument>(collection).FindOneAndUpdateAsync(filter, update);
         }
     }
 }
