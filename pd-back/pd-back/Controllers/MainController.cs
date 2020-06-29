@@ -85,6 +85,17 @@ namespace PhotoDuel.Controllers
             );
         }
         
+        [HttpPost("/updateStory")]
+        public Task UpdateStory()
+        {
+            return HandleRequest<UpdateStoryRequest, DuelResponse>(
+                request => new DuelResponse
+                {
+                    Duel = _duelService.UpdateStory(request.UserId, request.DuelId, request.StoryUrl)
+                }
+            );
+        }
+        
         private Task HandleRequest<TRequest, TResponse>(Func<TRequest, TResponse> handler) where TRequest : BaseRequest
         {
             using var reader = new StreamReader(Request.Body);

@@ -135,6 +135,35 @@ namespace PhotoDuel.Services
             };
         }
 
+        public Duel UpdateStory(string userId, string duelId, string storyUrl)
+        {
+            // load user
+            var user = _dbService.Collection<User>("users").FirstOrDefault(u => u.Id == userId);
+            if (user == null) throw new InvalidOperationException("User does not exist");
+            // load duel
+            var duel = _dbService.Collection<Duel>("duels").FirstOrDefault(d => d.Id == duelId);
+            if (duel == null || duel.Status != DuelStatus.Started) return null;
+            
+            if (duel.Creator.User.Id != userId && duel.Opponent.User.Id != userId)
+            {
+                throw new InvalidOperationException("This is not a participant of this duel");
+            }
+            
+            // check what user
+            if (duel.Creator.User.Id == userId)
+            {
+                duel.Creator.Story = storyUrl;
+            }
+            else
+            {
+                duel.Opponent.Story = storyUrl;
+            }
+            
+            // update db
+            _dbService.UpdateAsync("duels", duel);
+            return duel;
+        }
+
         public bool DeleteDuel(string userId, string duelId)
         {
             var duel = _dbService.Collection<Duel>("duels").FirstOrDefault(d => d.Id == duelId);
