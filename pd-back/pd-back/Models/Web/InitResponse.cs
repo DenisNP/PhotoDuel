@@ -8,6 +8,7 @@
         public Duel[] FriendDuels { get; set; }
         public Duel[] MyDuels { get; set; }
         public Winner[] Pantheon { get; set; }
+        public Category[] Categories { get; set; }
         public string Message { get; set; }
     }
 }

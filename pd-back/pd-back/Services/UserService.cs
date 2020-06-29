@@ -130,12 +130,12 @@ namespace PhotoDuel.Services
                 // add creator to pantheon if he is winner or there is a tie with non-zero votes 
                 if (duel.Creator.Voters.Count > 0 && duel.Creator.Voters.Count >= duel.Opponent.Voters.Count)
                 {
-                    winners.Add(new Winner(duel.Creator, duel.CategoryId, duel.ChallengeId));
+                    winners.Add(new Winner(duel.Creator, duel.ChallengeId));
                 }
                 // add opponent to pantheon if he is winner or there is a tie with non-zero votes 
                 if (duel.Opponent.Voters.Count > 0 && duel.Opponent.Voters.Count >= duel.Creator.Voters.Count)
                 {
-                    winners.Add(new Winner(duel.Opponent, duel.CategoryId, duel.ChallengeId));
+                    winners.Add(new Winner(duel.Opponent, duel.ChallengeId));
                 }
             }
 

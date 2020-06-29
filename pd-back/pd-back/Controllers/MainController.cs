@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ namespace PhotoDuel.Controllers
     public class MainController : ControllerBase
     {
         private readonly UserService _userService;
+        private readonly DuelService _duelService;
         private readonly ILogger<MainController> _logger;
 
         private readonly JsonSerializerSettings _converterSettings = new JsonSerializerSettings
@@ -24,9 +26,10 @@ namespace PhotoDuel.Controllers
             }
         };
 
-        public MainController(UserService userService, ILogger<MainController> logger)
+        public MainController(UserService userService, DuelService duelService, ILogger<MainController> logger)
         {
             _userService = userService;
+            _duelService = duelService;
             _logger = logger;
         }
         
@@ -43,19 +46,36 @@ namespace PhotoDuel.Controllers
         [HttpPost("/init")]
         public Task Init()
         {
+            return HandleRequest<InitRequest, InitResponse>(_userService.Init);
+        }
+
+        [HttpPost("/create")]
+        public Task Create()
+        {
+            return HandleRequest<CreateDuelRequest, DuelResponse>(_duelService.CreateDuel);
+        }
+
+        [HttpPost("/join")]
+        public Task Join()
+        {
+            return HandleRequest<JoinDuelRequest, DuelResponse>(_duelService.JoinDuel);
+        }
+        
+        private Task HandleRequest<TRequest, TResponse>(Func<TRequest, TResponse> handler) where TRequest : BaseRequest
+        {
             using var reader = new StreamReader(Request.Body);
             var body = reader.ReadToEnd();
             
             _logger.LogInformation($"REQUEST:\n{body}");
-            var request = JsonConvert.DeserializeObject<InitRequest>(body, _converterSettings);
+            var request = JsonConvert.DeserializeObject<TRequest>(body, _converterSettings);
 
-            var user = _userService.Init(request);
-            var result = JsonConvert.SerializeObject(user, _converterSettings);
+            var response = handler(request);
+            var stringResponse = JsonConvert.SerializeObject(response, _converterSettings);
             
-            _logger.LogInformation($"RESPONSE:\n{result}");
+            _logger.LogInformation($"RESPONSE:\n{stringResponse}");
 
             Response.Headers.Add("Content-Type", "application/json; charset=utf-8");
-            return Response.WriteAsync(result);
+            return Response.WriteAsync(stringResponse);
         }
     }
 }

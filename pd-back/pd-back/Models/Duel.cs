@@ -16,13 +16,12 @@ namespace PhotoDuel.Models
         
         public Duellist Creator { get; set; }
         public Duellist Opponent { get; set; }
-        
+
         public long TimeStart { get; set; }
         public long TimeFinish { get; set; }
-        
-        public int CategoryId { get; set; }
-        public int ChallengeId { get; set; }
-        public string ChallengeText { get; set; }
+
+        public int ChallengeId { get; set; } = -1;
+        public string ChallengeText { get; set; } = "";
     }
     
     public class Duellist
@@ -37,16 +36,14 @@ namespace PhotoDuel.Models
     {
         public UserMeta User { get; set; }
         public string Image { get; set; }
-        public int CategoryId { get; set; }
         public int ChallengeId { get; set; }
 
         public Winner() { }
 
-        public Winner(Duellist duellist, int categoryId, int challengeId)
+        public Winner(Duellist duellist, int challengeId)
         {
             User = duellist.User;
             Image = duellist.Image;
-            CategoryId = categoryId;
             ChallengeId = challengeId;
         }
     }
