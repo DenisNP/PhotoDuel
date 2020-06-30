@@ -13,11 +13,15 @@ namespace PhotoDuel.Services
         private const string VkApiAddress = "https://api.vk.com";
         private const string VkApiVersion = "5.120";
         private readonly string _vkApiKey;
+        private readonly string _vkApiSecret;
 
         public VkService()
         {
             var key = Environment.GetEnvironmentVariable("PHOTO_DUEL_VK_TOKEN");
             _vkApiKey = key ?? throw new ArgumentException("No VK Service token!");
+
+            var secret = Environment.GetEnvironmentVariable("PHOTO_DUEL_VK_SECRET");
+            _vkApiSecret = secret ?? throw new ArgumentException("No VK Secret key!");
         }
 
         public void Notify(string[] userIds, string message, string hash = "")
@@ -47,6 +51,20 @@ namespace PhotoDuel.Services
                 Name = vkUser.FullName,
                 Photo = vkUser.Photo
             };
+        }
+
+        public bool IsSignValid(string userId, Dictionary<string, string> pars, string sign)
+        {
+#if DEBUG
+            if (userId == "463377") return true;
+#endif            
+            var parsString = string.Join(
+                "&",
+                pars.Select(kv => $"{kv.Key}={kv.Value}").OrderBy(x => x)
+            );
+
+            var calculatedSign = Utils.ToBase64(Utils.HashHMAC(_vkApiSecret, parsString));
+            return calculatedSign == sign && pars.ContainsKey("vk_user_id") && pars["vk_user_id"] == userId;
         }
 
         private string MakeVkRequest(string method, Dictionary<string, string> data)

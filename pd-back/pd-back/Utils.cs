@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace PhotoDuel
@@ -34,6 +35,22 @@ namespace PhotoDuel
             var bytes = response.Content.ReadAsByteArrayAsync().Result;
 
             return Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+        }
+        
+        public static byte[] HashHMAC(string key, string message)
+        {
+            var encoding = new UTF8Encoding();
+            var hash = new HMACSHA256(encoding.GetBytes(key));
+            var result = hash.ComputeHash(encoding.GetBytes(message));
+            return result;
+        }
+        
+        public static string ToBase64(byte[] hash)
+        {
+            return Convert.ToBase64String(hash)
+                .TrimEnd(new []{'='})
+                .Replace('+', '-')
+                .Replace('/', '_');
         }
     }
 }

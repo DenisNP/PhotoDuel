@@ -11,6 +11,7 @@ using PhotoDuel.Models.Web;
 using PhotoDuel.Models.Web.Request;
 using PhotoDuel.Models.Web.Response;
 using PhotoDuel.Services;
+using PhotoDuel.Services.Abstract;
 
 namespace PhotoDuel.Controllers
 {
@@ -20,6 +21,7 @@ namespace PhotoDuel.Controllers
         private readonly UserService _userService;
         private readonly DuelService _duelService;
         private readonly ContentService _contentService;
+        private readonly ISocialService _socialService;
         private readonly ILogger<MainController> _logger;
 
         private readonly JsonSerializerSettings _converterSettings = new JsonSerializerSettings
@@ -34,12 +36,14 @@ namespace PhotoDuel.Controllers
             UserService userService,
             DuelService duelService,
             ContentService contentService,
+            ISocialService socialService,
             ILogger<MainController> logger
         )
         {
             _userService = userService;
             _duelService = duelService;
             _contentService = contentService;
+            _socialService = socialService;
             _logger = logger;
         }
         
@@ -139,18 +143,29 @@ namespace PhotoDuel.Controllers
         
         private Task HandleRequest<TRequest, TResponse>(Func<TRequest, TResponse> handler) where TRequest : BaseRequest
         {
+            // setup response
+            Response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+            
+            // load request body
             using var reader = new StreamReader(Request.Body);
             var body = reader.ReadToEnd();
             
             _logger.LogInformation($"REQUEST:\n{body}");
             var request = JsonConvert.DeserializeObject<TRequest>(body, _converterSettings);
 
+            // check sign
+            if (request == null || !_socialService.IsSignValid(request.UserId, request.Params, request.Sign))
+            {
+                _logger.LogWarning("Signature calculation failed");
+                Response.StatusCode = 400;
+                return Response.WriteAsync("{}");
+            }
+            
+            // handle request
             var response = handler(request);
             var stringResponse = JsonConvert.SerializeObject(response, _converterSettings);
             
             _logger.LogInformation($"RESPONSE:\n{stringResponse}");
-
-            Response.Headers.Add("Content-Type", "application/json; charset=utf-8");
             return Response.WriteAsync(stringResponse);
         }
     }
