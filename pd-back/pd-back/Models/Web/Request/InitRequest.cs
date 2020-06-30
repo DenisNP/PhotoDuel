@@ -14,11 +14,4 @@ namespace PhotoDuel.Models.Web.Request
         [JsonConverter(typeof(StringEnumConverter))]
         public Vote Vote { get; set; } = Vote.None;
     }
-
-    public enum Vote
-    {
-        None,
-        Creator,
-        Opponent
-    }
 }

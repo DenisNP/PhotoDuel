@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -48,28 +49,60 @@ namespace PhotoDuel.Controllers
         [HttpPost("/init")]
         public Task Init()
         {
-            return HandleRequest<InitRequest, InitResponse>(_userService.Init);
+            return HandleRequest<InitRequest, InitResponse>(req =>
+            {
+                var user = _userService.LoadUser(req.UserId);
+                var publicDuels = _userService.LoadPublicDuels().ToArray();
+                var friendDuels = _userService.LoadFriendDuels(req.FriendIds).ToArray();
+                var (myDuels, current) = _userService.LoadMyDuels(req.UserId);
+                var winners = _userService.LoadPantheon().ToArray();
+
+                // check if voting or load duel by link
+                var duelVoted = _userService.PreloadAndVote(user, req.DuelId, req.Vote, ref current, out var message);
+                if (duelVoted != null) myDuels.Add(duelVoted);
+
+                return new InitResponse
+                {
+                    User = user,
+                    Duel = current,
+                    PublicDuels = publicDuels,
+                    FriendDuels = friendDuels,
+                    MyDuels = myDuels.ToArray(),
+                    Pantheon = winners,
+                    Message = message
+                };
+            });
         }
 
         [HttpPost("/create")]
         public Task Create()
         {
-            return HandleRequest<CreateDuelRequest, DuelResponse>(_duelService.CreateDuel);
+            return HandleRequest<CreateDuelRequest, DuelResponse>(
+                req => new DuelResponse
+                {
+                    Duel = _duelService.CreateDuel(req.UserId, req.Image, req.Type, req.ChallengeId)
+                }
+            );
         }
 
         [HttpPost("/join")]
         public Task Join()
         {
-            return HandleRequest<JoinDuelRequest, DuelResponse>(_duelService.JoinDuel);
+            return HandleRequest<JoinDuelRequest, DuelResponse>(
+                req => new DuelResponse
+                {
+                    Duel = _duelService.JoinDuel(req.UserId, req.DuelId, req.Image)
+                }
+            );
         }
         
         [HttpPost("/delete")]
         public Task Delete()
         {
             return HandleRequest<DuelIdRequest, OkResponse>(
-                request => new OkResponse
+                req => new OkResponse
                 {
-                    Ok = _duelService.DeleteDuel(request.UserId, request.DuelId)
+                    Ok = _duelService.DeleteDuel(req.UserId, req.DuelId)
                 }
             );
         }
@@ -78,9 +111,9 @@ namespace PhotoDuel.Controllers
         public Task Report()
         {
             return HandleRequest<DuelIdRequest, OkResponse>(
-                request => new OkResponse
+                req => new OkResponse
                 {
-                    Ok = _duelService.ReportDuel(request.UserId, request.DuelId)
+                    Ok = _duelService.ReportDuel(req.UserId, req.DuelId)
                 }
             );
         }
@@ -89,9 +122,9 @@ namespace PhotoDuel.Controllers
         public Task UpdateStory()
         {
             return HandleRequest<UpdateStoryRequest, DuelResponse>(
-                request => new DuelResponse
+                req => new DuelResponse
                 {
-                    Duel = _duelService.UpdateStory(request.UserId, request.DuelId, request.StoryUrl)
+                    Duel = _duelService.UpdateStory(req.UserId, req.DuelId, req.StoryUrl)
                 }
             );
         }

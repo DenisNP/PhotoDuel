@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using PhotoDuel.Models;
-using PhotoDuel.Models.Web.Request;
-using PhotoDuel.Models.Web.Response;
 
 namespace PhotoDuel.Services
 {
@@ -19,7 +17,7 @@ namespace PhotoDuel.Services
         public bool Vote(Duel duel, UserMeta voter, Vote vote)
         {
             // this method should only been invoked with actual vote selected
-            if (vote == Models.Web.Request.Vote.None) throw new InvalidOperationException();
+            if (vote == Models.Vote.None) throw new InvalidOperationException();
             // user can only vote for running duel
             if (duel.Status != DuelStatus.Started) return false;
             // user cannot vote if he participates is duel
@@ -28,28 +26,27 @@ namespace PhotoDuel.Services
             if (duel.Creator.Voters.Concat(duel.Opponent.Voters).Any(v => v.Id == voter.Id)) return false;
 
             // vote for creator
-            if (vote == Models.Web.Request.Vote.Creator)
+            if (vote == Models.Vote.Creator)
             {
                 duel.Creator.Voters.Add(voter);
-                _dbService.PushAsync<Duel, UserMeta>("duels", duel.Id, d => d.Creator.Voters, voter);
+                _dbService.PushAsync<Duel, UserMeta>(duel.Id, d => d.Creator.Voters, voter);
             }
             // vote for opponent
             else
             {
                 duel.Opponent.Voters.Add(voter);
-                _dbService.PushAsync<Duel, UserMeta>("duels", duel.Id, d => d.Opponent.Voters, voter);
+                _dbService.PushAsync<Duel, UserMeta>(duel.Id, d => d.Opponent.Voters, voter);
             }
             
             return true;
         }
 
-        public DuelResponse CreateDuel(CreateDuelRequest request)
+        public Duel CreateDuel(string userId, string image, DuelType type, int challengeId)
         {
-            var user = _dbService.Collection<User>("users").FirstOrDefault(u => u.Id == request.UserId);
-            if (user == null) throw new InvalidOperationException("User does not exist");
+            var user = _dbService.ById<User>(userId, false);
 
             // load current duel if it exists
-            var currentDuel = _dbService.Collection<Duel>("duels")
+            var currentDuel = _dbService.Collection<Duel>()
                 .FirstOrDefault(
                     d => d.Status != DuelStatus.Finished
                          && (
@@ -59,63 +56,56 @@ namespace PhotoDuel.Services
                 );
             
             if (currentDuel != null) throw new InvalidOperationException("There is current duel already");
-            if (request.Image.Length > 300) throw new ArgumentException("Image url is too long");
+            if (image.Length > 300) throw new ArgumentException("Image url is too long");
             
             // create new duel object
             var duel = new Duel
             {
-                ChallengeId = request.ChallengeId, // TODO check if valid
+                ChallengeId = challengeId, // TODO check if valid
                 // ChallengeText = request.ChallengeText // TODO
                 Creator = new Duellist
                 {
-                    Image = request.Image,
+                    Image = image,
                     Time = Utils.Now(),
                     User = user.ToMeta(),
                     Voters = new List<UserMeta>()
                 },
                 Opponent = null,
                 Status = DuelStatus.Created,
-                Type = request.Type,
+                Type = type,
                 TimeStart = 0,
                 TimeFinish = 0,
                 Id = Utils.RandomString(8)
             };
             
             // write to database
-            _dbService.UpdateAsync("duels", duel);
+            _dbService.UpdateAsync(duel);
 
             // return
-            return new DuelResponse
-            {
-                Duel = duel
-            };
+            return duel;
         }
 
-        public DuelResponse JoinDuel(JoinDuelRequest request)
+        public Duel JoinDuel(string userId, string duelId, string image)
         {
             // load user
-            var user = _dbService.Collection<User>("users").FirstOrDefault(u => u.Id == request.UserId);
-            if (user == null) throw new InvalidOperationException("User does not exist");
-            
+            var user = _dbService.ById<User>(userId, false);
             // load duel
-            var duel = _dbService.Collection<Duel>("duels").FirstOrDefault(d => d.Id == request.DuelId);
-
+            var duel = _dbService.ById<Duel>(duelId);
             // check if duel already has opponent
             if (duel == null || duel.Opponent != null)
             {
-                return new DuelResponse
-                {
-                    Duel = null
-                };
+                return null;
             }
             
+            // check image
+            if (image.Length > 300) throw new ArgumentException("Image url is too long");
             // check if own
-            if (duel.Creator.User.Id == request.UserId) throw new InvalidOperationException("This is your own duel");
+            if (duel.Creator.User.Id == userId) throw new InvalidOperationException("This is your own duel");
 
             // create new duel object
             duel.Opponent = new Duellist
             {
-                Image = request.Image,
+                Image = image,
                 Time = Utils.Now(),
                 User = user.ToMeta(),
                 Voters = new List<UserMeta>()
@@ -126,22 +116,16 @@ namespace PhotoDuel.Services
             // TODO notification
             
             // write to db
-            _dbService.UpdateAsync("duels", duel);
+            _dbService.UpdateAsync(duel);
 
             // return
-            return new DuelResponse
-            {
-                Duel = duel
-            };
+            return duel;
         }
 
         public Duel UpdateStory(string userId, string duelId, string storyUrl)
         {
-            // load user
-            var user = _dbService.Collection<User>("users").FirstOrDefault(u => u.Id == userId);
-            if (user == null) throw new InvalidOperationException("User does not exist");
             // load duel
-            var duel = _dbService.Collection<Duel>("duels").FirstOrDefault(d => d.Id == duelId);
+            var duel = _dbService.ById<Duel>(duelId);
             if (duel == null || duel.Status != DuelStatus.Started) return null;
             
             if (duel.Creator.User.Id != userId && duel.Opponent.User.Id != userId)
@@ -150,40 +134,29 @@ namespace PhotoDuel.Services
             }
             
             // check what user
-            if (duel.Creator.User.Id == userId)
-            {
-                duel.Creator.Story = storyUrl;
-            }
-            else
-            {
-                duel.Opponent.Story = storyUrl;
-            }
-            
+            if (duel.Creator.User.Id == userId) duel.Creator.Story = storyUrl;
+            else duel.Opponent.Story = storyUrl;
+
             // update db
-            _dbService.UpdateAsync("duels", duel);
+            _dbService.UpdateAsync(duel);
             return duel;
         }
 
         public bool DeleteDuel(string userId, string duelId)
         {
-            var duel = _dbService.Collection<Duel>("duels").FirstOrDefault(d => d.Id == duelId);
+            var duel = _dbService.ById<Duel>(duelId);
+            if (duel == null || duel.Creator.User.Id != userId || duel.Status != DuelStatus.Created) return false;
             
-            if (duel != null && duel.Creator.User.Id == userId && duel.Status == DuelStatus.Created)
-            {
-                _dbService.DeleteAsync<Duel>("duels", duel.Id);
-                return true;
-            }
-
-            return false;
+            _dbService.DeleteAsync<Duel>(duel.Id);
+            return true;
         }
 
         public bool ReportDuel(string userId, string duelId)
         {
             // load user
-            var user = _dbService.Collection<User>("users").FirstOrDefault(u => u.Id == userId);
-            if (user == null) throw new InvalidOperationException("User does not exist");
+            var user = _dbService.ById<User>(userId, false);
             // load duel
-            var duel = _dbService.Collection<Duel>("duels").FirstOrDefault(d => d.Id == duelId);
+            var duel = _dbService.ById<Duel>(duelId);
             if (duel == null) return false;
             
             // create new report
@@ -196,8 +169,7 @@ namespace PhotoDuel.Services
             };
             
             // write to db
-            _dbService.UpdateAsync<Report>("reports", report);
-
+            _dbService.UpdateAsync(report);
             return true;
         }
     }
