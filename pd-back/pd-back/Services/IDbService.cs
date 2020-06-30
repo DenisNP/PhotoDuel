@@ -12,7 +12,7 @@ namespace PhotoDuel.Services
 
         T ById<T>(string id, bool allowNull = true, string? collection = null) where T : IIdentity;
         
-        IQueryable<T> Collection<T>(string? name = null) where T : IIdentity;
+        IQueryable<T> Collection<T>(string? name = null);
         
         void Update<T>(T document, string? collection = null) where T : IIdentity;
         

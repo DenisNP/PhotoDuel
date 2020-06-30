@@ -19,6 +19,7 @@ namespace PhotoDuel.Controllers
     {
         private readonly UserService _userService;
         private readonly DuelService _duelService;
+        private readonly ContentService _contentService;
         private readonly ILogger<MainController> _logger;
 
         private readonly JsonSerializerSettings _converterSettings = new JsonSerializerSettings
@@ -29,10 +30,16 @@ namespace PhotoDuel.Controllers
             }
         };
 
-        public MainController(UserService userService, DuelService duelService, ILogger<MainController> logger)
+        public MainController(
+            UserService userService,
+            DuelService duelService,
+            ContentService contentService,
+            ILogger<MainController> logger
+        )
         {
             _userService = userService;
             _duelService = duelService;
+            _contentService = contentService;
             _logger = logger;
         }
         
@@ -69,6 +76,7 @@ namespace PhotoDuel.Controllers
                     FriendDuels = friendDuels,
                     MyDuels = myDuels.ToArray(),
                     Pantheon = winners,
+                    Categories = _contentService.GetCategories(),
                     Message = message
                 };
             });

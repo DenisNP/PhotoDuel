@@ -55,7 +55,7 @@ namespace PhotoDuel.Services
             return obj;
         }
 
-        public IQueryable<T> Collection<T>(string? name = null) where T : IIdentity
+        public IQueryable<T> Collection<T>(string? name = null)
         {
             return GetCollection<T>(name).AsQueryable();
         }
@@ -90,7 +90,7 @@ namespace PhotoDuel.Services
             GetCollection<T>(collection).DeleteOneAsync(filter);
         }
         
-        private IMongoCollection<T> GetCollection<T>(string? name = null) where T : IIdentity
+        private IMongoCollection<T> GetCollection<T>(string? name = null)
         {
             return _db.GetCollection<T>(name ?? _getCollectionName(typeof(T)));
         }

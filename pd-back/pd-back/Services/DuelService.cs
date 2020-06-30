@@ -8,10 +8,12 @@ namespace PhotoDuel.Services
     public class DuelService
     {
         private readonly IDbService _dbService;
+        private readonly ContentService _contentService;
 
-        public DuelService(IDbService dbService)
+        public DuelService(IDbService dbService, ContentService contentService)
         {
             _dbService = dbService;
+            _contentService = contentService;
         }
 
         public bool Vote(Duel duel, UserMeta voter, Vote vote)
@@ -57,11 +59,12 @@ namespace PhotoDuel.Services
             
             if (currentDuel != null) throw new InvalidOperationException("There is current duel already");
             if (image.Length > 300) throw new ArgumentException("Image url is too long");
+            if (!_contentService.HasChallengeId(challengeId)) throw new ArgumentException("Wrong challengeId");
             
             // create new duel object
             var duel = new Duel
             {
-                ChallengeId = challengeId, // TODO check if valid
+                ChallengeId = challengeId,
                 // ChallengeText = request.ChallengeText // TODO
                 Creator = new Duellist
                 {

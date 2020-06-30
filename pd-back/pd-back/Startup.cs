@@ -15,6 +15,7 @@ namespace PhotoDuel
             services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; });
 
             services.AddSingleton<IDbService, MongoService>();
+            services.AddSingleton<ContentService>();
             services.AddScoped<UserService>();
             services.AddScoped<DuelService>();
         }

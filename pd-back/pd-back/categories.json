@@ -1,0 +1,40 @@
+[
+	{
+		"id": 1,
+		"name": "Категория 1",
+		"image": "http://lorempixel.com/400/200/abstract/",
+		"challenges": [
+			{
+				"id": 1001,
+				"icon": "settings_applications",
+				"name": "Задание 1",
+				"description": "Выполнить задание 1"
+			},
+			{
+				"id": 1002,
+				"icon": "settings_backup_restore",
+				"name": "Задание 2",
+				"description": "Выполнить задание 2"
+			}
+		]
+	},
+	{
+		"id": 2,
+		"name": "Категория 2",
+		"image": "http://lorempixel.com/400/200/abstract/",
+		"challenges": [
+			{
+				"id": 2001,
+				"icon": "rowing",
+				"name": "Задание 3",
+				"description": "Выполнить задание 3"
+			},
+			{
+				"id": 2002,
+				"icon": "settings_input_composite",
+				"name": "Задание 4",
+				"description": "Выполнить задание 4"
+			}
+		]
+	}
+]
