@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using PhotoDuel.Models;
+using PhotoDuel.Services.Abstract;
 
 namespace PhotoDuel.Services
 {
@@ -9,11 +10,13 @@ namespace PhotoDuel.Services
     {
         private readonly IDbService _dbService;
         private readonly ContentService _contentService;
+        private readonly ISocialService _socialService;
 
-        public DuelService(IDbService dbService, ContentService contentService)
+        public DuelService(IDbService dbService, ContentService contentService, ISocialService socialService)
         {
             _dbService = dbService;
             _contentService = contentService;
+            _socialService = socialService;
         }
 
         public bool Vote(Duel duel, UserMeta voter, Vote vote)
@@ -116,7 +119,12 @@ namespace PhotoDuel.Services
             duel.Status = DuelStatus.Started;
             duel.TimeStart = Utils.Now();
             duel.TimeFinish = Utils.Now() + 24 * 3600000L;
-            // TODO notification
+            
+            // notify creator
+            _socialService.Notify(
+                new[] {duel.Creator.User.Id},
+                $"{user.Name} принял ваш вызов. К барьеру, господа! Зайдите, чтобы опубликовать голосование."
+            );
             
             // write to db
             _dbService.UpdateAsync(duel);

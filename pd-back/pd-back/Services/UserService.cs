@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using PhotoDuel.Models;
+using PhotoDuel.Services.Abstract;
 
 namespace PhotoDuel.Services
 {
@@ -8,11 +9,13 @@ namespace PhotoDuel.Services
     {
         private readonly IDbService _dbService;
         private readonly DuelService _duelService;
+        private readonly ISocialService _socialService;
 
-        public UserService(IDbService dbService, DuelService duelService)
+        public UserService(IDbService dbService, DuelService duelService, ISocialService socialService)
         {
             _dbService = dbService;
             _duelService = duelService;
+            _socialService = socialService;
         }
 
         public Duel PreloadAndVote(User user, string duelId, Vote vote, ref Duel currentDuel, out string message)
@@ -138,9 +141,9 @@ namespace PhotoDuel.Services
                 };
             }
 
-            // TODO load user
-            //user.Name = 
-            //user.Photo = 
+            var vkUser = _socialService.GetUser(userId);
+            user.Name = vkUser.Name;
+            user.Photo = vkUser.Photo;
             
             _dbService.UpdateAsync(user);
             return user;

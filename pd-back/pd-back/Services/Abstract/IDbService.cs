@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using PhotoDuel.Models;
 
-namespace PhotoDuel.Services
+namespace PhotoDuel.Services.Abstract
 {
     public interface IDbService
     {
