@@ -12,7 +12,7 @@ namespace PhotoDuel.Services
     {
         private readonly ILogger<ContentService> _logger;
         private Category[] _categories;
-        private HashSet<int> _challengeIds;
+        private Dictionary<int, string> _challengeNames;
 
         public ContentService(ILogger<ContentService> logger)
         {
@@ -32,10 +32,10 @@ namespace PhotoDuel.Services
                 $"Categories loaded: {categories.Length}, total challenges: {challengesCount}"
             );
 
-            _challengeIds = _categories.SelectMany(c => c.Challenges.Select(x => x.Id)).ToHashSet();
+            _challengeNames = _categories.SelectMany(c => c.Challenges).ToDictionary(c => c.Id, c => c.Name);
 
             // check if valid
-            if (_challengeIds.Count != challengesCount)
+            if (_challengeNames.Keys.Count != challengesCount)
             {
                 throw new ArgumentException("Non unique challenge identifiers");
             }
@@ -53,7 +53,12 @@ namespace PhotoDuel.Services
 
         public bool HasChallengeId(int challengeId)
         {
-            return _challengeIds.Contains(challengeId);
+            return _challengeNames.ContainsKey(challengeId);
+        }
+
+        public string GetChallengeName(int challengeId)
+        {
+            return _challengeNames.ContainsKey(challengeId) ? _challengeNames[challengeId] : "";
         }
     }
 }

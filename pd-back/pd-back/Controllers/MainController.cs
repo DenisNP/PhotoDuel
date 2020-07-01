@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using PhotoDuel.Models.Web;
 using PhotoDuel.Models.Web.Request;
 using PhotoDuel.Models.Web.Response;
 using PhotoDuel.Services;

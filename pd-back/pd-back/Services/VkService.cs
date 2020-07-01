@@ -24,14 +24,20 @@ namespace PhotoDuel.Services
             _vkApiSecret = secret ?? throw new ArgumentException("No VK Secret key!");
         }
 
-        public void Notify(string[] userIds, string message, string hash = "")
+        public void Notify(string[] allUserIds, string message, string hash = "")
         {
-            MakeVkRequest("notifications.sendMessage", new Dictionary<string, string>
+            var uids = allUserIds.ToList();
+            while (uids.Count > 0)
             {
-                {"user_ids", string.Join(",", userIds)},
-                {"fragment", hash},
-                {"message", message}
-            });
+                var userIds = uids.Shift(100);
+                
+                MakeVkRequest("notifications.sendMessage", new Dictionary<string, string>
+                {
+                    {"user_ids", string.Join(",", userIds)},
+                    {"fragment", hash},
+                    {"message", message}
+                });
+            }
         }
 
         public UserMeta GetUser(string userId)

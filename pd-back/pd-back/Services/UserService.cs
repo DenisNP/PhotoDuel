@@ -32,7 +32,7 @@ namespace PhotoDuel.Services
                         message = "Сначала завершите текущую дуэль";
                     }
                     // set requested duel as current
-                    else
+                    else if (reqDuel.Status == DuelStatus.Created)
                     {
                         currentDuel = reqDuel;
                     }

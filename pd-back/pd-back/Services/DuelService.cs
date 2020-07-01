@@ -153,6 +153,46 @@ namespace PhotoDuel.Services
             return duel;
         }
 
+        public void FinishDuels(List<Duel> duels)
+        {
+            foreach (var duel in duels)
+            {
+                duel.Status = DuelStatus.Finished;
+                _dbService.UpdateAsync(duel);
+
+                var dName = _contentService.GetChallengeName(duel.ChallengeId);
+                var message = $"Господа, в дуэли \"{dName}\"";
+                if (duel.Creator.Voters.Count > duel.Opponent.Voters.Count)
+                {
+                    // creator wins
+                    message += $" побеждает {duel.Creator.User.Name}";
+                } 
+                else if (duel.Creator.Voters.Count < duel.Opponent.Voters.Count)
+                {
+                    // opponent wins
+                    message += $" побеждает {duel.Opponent.User.Name}";
+                } 
+                else if (duel.Creator.Voters.Count > 0)
+                {
+                    // tie
+                    message += " ничья";
+                }
+                else
+                {
+                    // not happened
+                    message += " участники мирно разошлись";
+                }
+
+                // send messages
+                var allIds = duel.Creator.Voters.Select(x => x.Id)
+                    .Concat(duel.Opponent.Voters.Select(x => x.Id))
+                    .Append(duel.Creator.User.Id)
+                    .Append(duel.Opponent.User.Id);
+                
+                _socialService.Notify(allIds.ToArray(), message, duel.Id);
+            }
+        }
+
         public bool DeleteDuel(string userId, string duelId)
         {
             var duel = _dbService.ById<Duel>(duelId);

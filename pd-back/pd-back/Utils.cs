@@ -52,5 +52,12 @@ namespace PhotoDuel
                 .Replace('+', '-')
                 .Replace('/', '_');
         }
+
+        public static IEnumerable<T> Shift<T>(this List<T> list, int count)
+        {
+            var items = list.Take(count);
+            list.RemoveRange(0, Math.Min(count, list.Count));
+            return items;
+        }
     }
 }

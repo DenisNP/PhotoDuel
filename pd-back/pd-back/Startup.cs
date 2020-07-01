@@ -20,6 +20,8 @@ namespace PhotoDuel
             services.AddSingleton<ContentService>();
             services.AddScoped<UserService>();
             services.AddScoped<DuelService>();
+     
+            services.AddHostedService<CheckDuelsService>();
         }
 
         public void Configure(IApplicationBuilder app, IDbService dbService, ContentService contentService)
