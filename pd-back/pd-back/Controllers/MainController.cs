@@ -111,6 +111,17 @@ namespace PhotoDuel.Controllers
             );
         }
 
+        [HttpPost("/shuffle")]
+        public Task Shuffle()
+        {
+            return HandleRequest<BaseRequest, UserResponse>(
+                req => new UserResponse
+                {
+                    User = _userService.ShuffleChallenges(req.UserId)
+                }
+            );
+        }
+
         [HttpPost("/join")]
         public Task Join()
         {

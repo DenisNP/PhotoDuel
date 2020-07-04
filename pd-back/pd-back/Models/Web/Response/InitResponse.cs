@@ -1,8 +1,7 @@
 ﻿namespace PhotoDuel.Models.Web.Response
 {
-    public class InitResponse
+    public class InitResponse : UserResponse
     {
-        public User User { get; set; }
         public Duel[] MyDuels { get; set; }
         public Winner[] Pantheon { get; set; }
         public Category[] Categories { get; set; }
