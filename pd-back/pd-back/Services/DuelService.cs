@@ -46,7 +46,7 @@ namespace PhotoDuel.Services
             return true;
         }
 
-        public Duel CreateDuel(string userId, string image, DuelType type, int challengeId)
+        public Duel CreateDuel(string userId, string image, int challengeId)
         {
             var user = _dbService.ById<User>(userId, false);
 
@@ -78,7 +78,7 @@ namespace PhotoDuel.Services
                 },
                 Opponent = null,
                 Status = DuelStatus.Created,
-                Type = type,
+                IsPublic = false,
                 TimeStart = 0,
                 TimeFinish = 0,
                 Id = Utils.RandomString(8)
@@ -130,6 +130,23 @@ namespace PhotoDuel.Services
             _dbService.UpdateAsync(duel);
 
             // return
+            return duel;
+        }
+
+        public Duel MakePublic(string userId, string duelId)
+        {
+            // load user
+            var user = _dbService.ById<User>(userId, false);
+            // load duel
+            var duel = _dbService.ById<Duel>(duelId, false);
+
+            // check if valid to set public
+            if (duel.Status != DuelStatus.Created || duel.Creator.User.Id != userId) return null;
+            if (duel.IsPublic) return duel;
+
+            // set duel to public
+            duel.IsPublic = true;
+            _dbService.UpdateAsync(duel);
             return duel;
         }
 

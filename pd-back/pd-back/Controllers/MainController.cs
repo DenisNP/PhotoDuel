@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using PhotoDuel.Models;
 using PhotoDuel.Models.Web.Request;
 using PhotoDuel.Models.Web.Response;
 using PhotoDuel.Services;
@@ -62,22 +63,24 @@ namespace PhotoDuel.Controllers
             return HandleRequest<InitRequest, InitResponse>(req =>
             {
                 var user = _userService.LoadUser(req.UserId);
-                var publicDuels = _userService.LoadPublicDuels().ToArray();
-                var friendDuels = _userService.LoadFriendDuels(req.FriendIds).ToArray();
-                var (myDuels, current) = _userService.LoadMyDuels(req.UserId);
+                var myDuels = _userService.LoadMyDuels(req.UserId);
                 var winners = _userService.LoadPantheon().ToArray();
 
                 // check if voting or load duel by link
-                var duelVoted = _userService.PreloadAndVote(user, req.DuelId, req.Vote, ref current, out var message);
-                if (duelVoted != null) myDuels.Add(duelVoted);
+                var additionalDuel = _userService.LoadAdditional(req.DuelId, myDuels, out var message);
+                if (additionalDuel != null && req.Vote != Vote.None)
+                {
+                    _userService.TryVote(additionalDuel, user, req.Vote, out message);
+                }
+                
+                // add additional duel to current
+                if (additionalDuel != null && myDuels.All(d => d.Id != additionalDuel.Id)) myDuels.Add(additionalDuel);
 
+                // return response
                 return new InitResponse
                 {
                     User = user,
-                    Duel = current,
-                    PublicDuels = publicDuels,
-                    FriendDuels = friendDuels,
-                    MyDuels = myDuels.ToArray(),
+                    MyDuels = myDuels.OrderBy(d => d.Status).ThenByDescending(d => d.Creator.Time).ToArray(),
                     Pantheon = winners,
                     Categories = _contentService.GetCategories(),
                     Message = message
@@ -91,7 +94,18 @@ namespace PhotoDuel.Controllers
             return HandleRequest<CreateDuelRequest, DuelResponse>(
                 req => new DuelResponse
                 {
-                    Duel = _duelService.CreateDuel(req.UserId, req.Image, req.Type, req.ChallengeId)
+                    Duel = _duelService.CreateDuel(req.UserId, req.Image, req.ChallengeId)
+                }
+            );
+        }
+
+        [HttpPost("/public")]
+        public Task Public()
+        {
+            return HandleRequest<DuelIdRequest, DuelResponse>(
+                req => new DuelResponse
+                {
+                    Duel = _duelService.MakePublic(req.UserId, req.DuelId)
                 }
             );
         }

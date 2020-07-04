@@ -10,9 +10,8 @@ namespace PhotoDuel.Models
         
         [JsonConverter(typeof(StringEnumConverter))]
         public DuelStatus Status { get; set; }
-        
-        [JsonConverter(typeof(StringEnumConverter))]
-        public DuelType Type { get; set; }
+
+        public bool IsPublic { get; set; }
         
         public Duellist Creator { get; set; }
         public Duellist Opponent { get; set; }
@@ -54,12 +53,5 @@ namespace PhotoDuel.Models
         Created,
         Started,
         Finished
-    }
-
-    public enum DuelType
-    {
-        Public,
-        Friends,
-        Private
     }
 }

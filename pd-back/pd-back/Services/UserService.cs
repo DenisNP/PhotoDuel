@@ -18,68 +18,39 @@ namespace PhotoDuel.Services
             _socialService = socialService;
         }
 
-        public Duel PreloadAndVote(User user, string duelId, Vote vote, ref Duel currentDuel, out string message)
+        public Duel LoadAdditional(string duelId, List<Duel> myDuels, out string message)
         {
+            Duel additionalDuel = null;
             message = "";
-            var reqDuel = _dbService.ById<Duel>(duelId);
-            if (reqDuel != null)
+            if (!string.IsNullOrEmpty(duelId))
             {
-                if (vote == Vote.None)
+                additionalDuel = myDuels.FirstOrDefault(d => d.Id == duelId);
+                if (additionalDuel == null)
                 {
-                    // conflicted current duel
-                    if (currentDuel != null && currentDuel.Id != reqDuel.Id)
+                    additionalDuel = _dbService.ById<Duel>(duelId);
+                    if (additionalDuel == null)
                     {
-                        message = "Сначала завершите текущую дуэль";
-                    }
-                    // set requested duel as current
-                    else if (reqDuel.Status == DuelStatus.Created)
-                    {
-                        currentDuel = reqDuel;
-                    }
-                }
-                else
-                {
-                    // try to vote for requested duel
-                    if (_duelService.Vote(reqDuel, user.ToMeta(), vote))
-                    {
-                        message = "Ваш голос засчитан";
-                        return reqDuel;
-                    }
-                    else
-                    {
-                        message = "Вы больше не можете голосовать за эту дуэль";
+                        message = "Такой дуэли не существует";
                     }
                 }
             }
-            // requested duel not found
-            else
+
+            return additionalDuel;
+        }
+
+        public bool TryVote(Duel duel, User user, Vote vote, out string message)
+        {
+            if (_duelService.Vote(duel, user.ToMeta(), vote))
             {
-                message = "Дуэли по этой ссылке больше нет";
+                message = "Ваш голос засчитан";
+                return true;
             }
-            
-            return null;
+
+            message = "Вы больше не можете голосовать за эту дуэль";
+            return false;
         }
 
-        public IEnumerable<Duel> LoadPublicDuels()
-        {
-            return _dbService.Collection<Duel>()
-                .Where(d => d.Status == DuelStatus.Created && d.Type == DuelType.Public)
-                .OrderByDescending(d => d.Creator.Time)
-                .Take(100);
-        }
-
-        public IEnumerable<Duel> LoadFriendDuels(string[] friendIds)
-        {
-            return _dbService.Collection<Duel>()
-                .Where(
-                    d => d.Status == DuelStatus.Created
-                         && d.Type == DuelType.Friends
-                         && friendIds.Contains(d.Creator.User.Id)
-                )
-                .OrderByDescending(d => d.Creator.Time);
-        }
-
-        public (List<Duel> myDuels, Duel currentDuel) LoadMyDuels(string userId)
+        public List<Duel> LoadMyDuels(string userId)
         {
             var myDuels = _dbService.Collection<Duel>()
                 .Where(
@@ -90,16 +61,8 @@ namespace PhotoDuel.Services
                 )
                 .OrderByDescending(d => d.Creator.Time)
                 .ToList();
-            
-            var currentDuel = myDuels.SingleOrDefault(
-                d => d.Status != DuelStatus.Finished
-                     && (
-                         d.Creator.User.Id == userId
-                         || d.Opponent != null && d.Opponent.User.Id == userId
-                     )
-            );
 
-            return (myDuels, currentDuel);
+            return myDuels;
         }
 
         public IEnumerable<Winner> LoadPantheon()

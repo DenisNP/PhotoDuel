@@ -3,6 +3,9 @@
     public class User : UserMeta
     {
         public int Rating { get; set; }
+        public long LastShuffle { get; set; }
+        public int[] ChallengeIds { get; set; }
+        public int PublicDuelId { get; set; } = -1;
         
         public UserMeta ToMeta()
         {
