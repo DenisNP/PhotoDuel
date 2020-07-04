@@ -4,8 +4,9 @@
     {
         public int Rating { get; set; }
         public long LastShuffle { get; set; }
+        public int ShufflesLeft { get; set; }
         public int[] ChallengeIds { get; set; }
-        public int PublicDuelId { get; set; } = -1;
+        public Duel PublicDuel { get; set; } = null;
         
         public UserMeta ToMeta()
         {

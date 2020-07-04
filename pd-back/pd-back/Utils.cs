@@ -13,6 +13,27 @@ namespace PhotoDuel
         {
             return DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
+
+        public static long ToUnixTimeMs(this DateTime dateTime)
+        {
+            var span = dateTime - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return (long)span.TotalMilliseconds;
+        }
+
+        public static IList<T> Shuffle<T>(this IList<T> list)  
+        {
+            var rng = new Random(); 
+            var n = list.Count;  
+            while (n > 1) {  
+                n--;  
+                var k = rng.Next(n + 1);  
+                var value = list[k];  
+                list[k] = list[n];  
+                list[n] = value;  
+            }
+
+            return list;
+        }
         
         public static string RandomString(int length)
         {

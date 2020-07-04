@@ -63,11 +63,12 @@ namespace PhotoDuel.Controllers
             return HandleRequest<InitRequest, InitResponse>(req =>
             {
                 var user = _userService.LoadUser(req.UserId);
+                user = _userService.CheckShuffles(user);
                 var myDuels = _userService.LoadMyDuels(req.UserId);
                 var winners = _userService.LoadPantheon().ToArray();
 
                 // check if voting or load duel by link
-                var additionalDuel = _userService.LoadAdditional(req.DuelId, myDuels, out var message);
+                var additionalDuel = _duelService.LoadAdditional(req.DuelId, myDuels, out var message);
                 if (additionalDuel != null && req.Vote != Vote.None)
                 {
                     _userService.TryVote(additionalDuel, user, req.Vote, out message);

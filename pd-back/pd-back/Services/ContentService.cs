@@ -14,6 +14,8 @@ namespace PhotoDuel.Services
         private Category[] _categories;
         private Dictionary<int, string> _challengeNames;
 
+        private readonly Random _random = new Random();
+        
         public ContentService(ILogger<ContentService> logger)
         {
             _logger = logger;
@@ -44,11 +46,40 @@ namespace PhotoDuel.Services
             {
                 throw new ArgumentException("Non unique category identifiers");
             }
+            
+            foreach (var category in categories)
+            {
+                foreach (var challenge in category.Challenges)
+                {
+                    if (GetCategoryByChallenge(challenge.Id) != category.Id)
+                    {
+                        throw new ArgumentException($"Non valid identifier, cat: {category.Id}; challenge: {challenge.Id}");
+                    }
+                }
+            }
         }
 
         public Category[] GetCategories()
         {
             return _categories;
+        }
+
+        public int[] GetRandomCategoryIds(int count)
+        {
+            return _categories.Select(x => x.Id).ToList().Shuffle().Take(count).ToArray();
+        }
+
+        public int GetCategoryByChallenge(int challengeId)
+        {
+            return (int) Math.Floor((double)challengeId / 1000);
+        }
+
+        public int GetRandomChallenge(int categoryId)
+        {
+            var category = _categories.FirstOrDefault(c => c.Id == categoryId);
+            if (category == null) throw new InvalidOperationException($"No category with id: {categoryId}");
+
+            return category.Challenges[_random.Next(category.Challenges.Length)].Id;
         }
 
         public bool HasChallengeId(int challengeId)

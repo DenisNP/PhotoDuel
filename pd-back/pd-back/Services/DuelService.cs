@@ -18,6 +18,26 @@ namespace PhotoDuel.Services
             _contentService = contentService;
             _socialService = socialService;
         }
+        
+        public Duel LoadAdditional(string duelId, List<Duel> myDuels, out string message)
+        {
+            Duel additionalDuel = null;
+            message = "";
+            if (!string.IsNullOrEmpty(duelId))
+            {
+                additionalDuel = myDuels.FirstOrDefault(d => d.Id == duelId);
+                if (additionalDuel == null)
+                {
+                    additionalDuel = _dbService.ById<Duel>(duelId);
+                    if (additionalDuel == null)
+                    {
+                        message = "Такой дуэли не существует";
+                    }
+                }
+            }
+
+            return additionalDuel;
+        }
 
         public bool Vote(Duel duel, UserMeta voter, Vote vote)
         {

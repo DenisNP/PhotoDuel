@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PhotoDuel.Models;
 using PhotoDuel.Services.Abstract;
@@ -7,35 +8,82 @@ namespace PhotoDuel.Services
 {
     public class UserService
     {
+        private const int DailyChallenges = 3;
+        private const int DailyShuffles = 2;
+        
         private readonly IDbService _dbService;
         private readonly DuelService _duelService;
+        private readonly ContentService _contentService;
         private readonly ISocialService _socialService;
+        private readonly Random _random = new Random();
 
-        public UserService(IDbService dbService, DuelService duelService, ISocialService socialService)
+        public UserService(IDbService dbService, DuelService duelService, ContentService contentService, ISocialService socialService)
         {
             _dbService = dbService;
             _duelService = duelService;
+            _contentService = contentService;
             _socialService = socialService;
         }
 
-        public Duel LoadAdditional(string duelId, List<Duel> myDuels, out string message)
+        public User CheckShuffles(User user)
         {
-            Duel additionalDuel = null;
-            message = "";
-            if (!string.IsNullOrEmpty(duelId))
+            var today = DateTime.Today.ToUnixTimeMs();
+            if (user.LastShuffle < today)
             {
-                additionalDuel = myDuels.FirstOrDefault(d => d.Id == duelId);
-                if (additionalDuel == null)
+                // full update
+                user.ShufflesLeft = DailyShuffles + 1;
+                return ShuffleChallenges(user, true);
+            }
+            else if (user.PublicDuel != null)
+            {
+                // check current public challenge
+                var duel = _dbService.ById<Duel>(user.PublicDuel.Id);
+                if (duel != null && duel.Status != DuelStatus.Created)
                 {
-                    additionalDuel = _dbService.ById<Duel>(duelId);
-                    if (additionalDuel == null)
-                    {
-                        message = "Такой дуэли не существует";
-                    }
+                    user.PublicDuel = null;
+                    _dbService.UpdateAsync(user);
                 }
             }
 
-            return additionalDuel;
+            return user;
+        }
+
+        public User ShuffleChallenges(User user, bool changeCategories = false)
+        {
+            if (--user.ShufflesLeft < 0) return user;
+
+            // get category ids
+            var categoryIds = changeCategories || user.ChallengeIds.Length < DailyChallenges
+                ? _contentService.GetRandomCategoryIds(DailyChallenges)
+                : user.ChallengeIds.Select(c => _contentService.GetCategoryByChallenge(c)).ToArray();
+
+            // generate new challenges
+            var challenges = categoryIds.Select(c => _contentService.GetRandomChallenge(c)).ToArray();
+            user.ChallengeIds = challenges;
+            
+            // get public
+            var count = _dbService.Collection<Duel>().Count(d => d.IsPublic && d.Status == DuelStatus.Created);
+            var randIndex = _random.Next(count);
+            
+            var publicDuels = _dbService.Collection<Duel>()
+                .Where(d => d.IsPublic && d.Status == DuelStatus.Created)
+                .Skip(randIndex)
+                .Take(1)
+                .ToList();
+
+            var publicDuel = publicDuels.Count > 0 ? publicDuels.First() : null;
+            user.PublicDuel = publicDuel;
+            
+            // update and return
+            user.LastShuffle = Utils.Now();
+            _dbService.UpdateAsync(user);
+            return user;
+        }
+
+        public User ShuffleChallenges(string userId)
+        {
+            var user = _dbService.ById<User>(userId, false);
+            return ShuffleChallenges(user);
         }
 
         public bool TryVote(Duel duel, User user, Vote vote, out string message)
