@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace PhotoDuel.Models.Web.Request
+﻿namespace PhotoDuel.Models.Web.Request
 {
     public class CreateDuelRequest : BaseRequest
     {

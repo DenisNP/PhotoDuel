@@ -4,11 +4,21 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace PhotoDuel
 {
     public static class Utils
     {
+        public static readonly JsonSerializerSettings ConverterSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            }
+        };
+        
         public static long Now()
         {
             return DateTimeOffset.Now.ToUnixTimeMilliseconds();

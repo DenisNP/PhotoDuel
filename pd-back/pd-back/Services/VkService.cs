@@ -62,7 +62,7 @@ namespace PhotoDuel.Services
         public bool IsSignValid(string userId, Dictionary<string, string> pars, string sign)
         {
 #if DEBUG
-            if (userId == "463377") return true;
+            return true;
 #endif            
             var parsString = string.Join(
                 "&",

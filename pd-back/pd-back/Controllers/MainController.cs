@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using PhotoDuel.Models;
 using PhotoDuel.Models.Web.Request;
 using PhotoDuel.Models.Web.Response;
 using PhotoDuel.Services;
@@ -23,14 +22,6 @@ namespace PhotoDuel.Controllers
         private readonly ContentService _contentService;
         private readonly ISocialService _socialService;
         private readonly ILogger<MainController> _logger;
-
-        private readonly JsonSerializerSettings _converterSettings = new JsonSerializerSettings
-        {
-            ContractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new CamelCaseNamingStrategy()
-            }
-        };
 
         public MainController(
             UserService userService,
@@ -68,22 +59,8 @@ namespace PhotoDuel.Controllers
                 var winners = _userService.LoadPantheon().ToArray();
 
                 // check if voting or load duel by link
-                var additionalDuel = _duelService.LoadAdditional(req.DuelId, myDuels, out var message);
-                if (additionalDuel != null && req.Vote != Vote.None)
-                {
-                    _userService.TryVote(additionalDuel, user, req.Vote, out message);
-                }
-                
-                // add additional duel to current
-                if (additionalDuel != null && myDuels.All(d => d.Id != additionalDuel.Id))
-                {
-                    var hasCurrent = myDuels.Count(Duel.IsCurrentDuelOf(user.Id).Compile()) > 0;
-                    if (hasCurrent && req.Vote == Vote.None)
-                    {
-                        message = "Сначала завершите текущую дуэль";
-                        myDuels.Add(additionalDuel);
-                    }
-                }
+                var additionalDuel = _duelService.LoadAdditional(req.UserId, req.Vote, req.DuelId, myDuels, out var message); 
+                _userService.TryVote(additionalDuel, user, req.Vote, out message);
 
                 // return response
                 return new InitResponse
@@ -184,22 +161,31 @@ namespace PhotoDuel.Controllers
             var body = reader.ReadToEnd();
             
             _logger.LogInformation($"REQUEST:\n{body}");
-            var request = JsonConvert.DeserializeObject<TRequest>(body, _converterSettings);
+            var request = JsonConvert.DeserializeObject<TRequest>(body, Utils.ConverterSettings);
 
             // check sign
             if (request == null || !_socialService.IsSignValid(request.UserId, request.Params, request.Sign))
             {
                 _logger.LogWarning("Signature calculation failed");
                 Response.StatusCode = 400;
-                return Response.WriteAsync("{}");
+                return Response.WriteAsync(new ErrorResponse("Signature calculation failed").ToString());
             }
             
             // handle request
-            var response = handler(request);
-            var stringResponse = JsonConvert.SerializeObject(response, _converterSettings);
+            try
+            {
+                var response = handler(request);
+                var stringResponse = JsonConvert.SerializeObject(response, Utils.ConverterSettings);
             
-            _logger.LogInformation($"RESPONSE:\n{stringResponse}");
-            return Response.WriteAsync(stringResponse);
+                _logger.LogInformation($"RESPONSE:\n{stringResponse}");
+                return Response.WriteAsync(stringResponse);
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning(e.Message);
+                Response.StatusCode = 400;
+                return Response.WriteAsync(new ErrorResponse(e.Message).ToString());
+            }
         }
     }
 }

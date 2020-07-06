@@ -50,7 +50,8 @@ namespace PhotoDuel.Services
 
         public User ShuffleChallenges(User user, bool changeCategories = false)
         {
-            if (--user.ShufflesLeft < 0) return user;
+            if (user.ShufflesLeft <= 0) return user;
+            user.ShufflesLeft--;
 
             // get category ids
             var categoryIds = changeCategories || user.ChallengeIds.Length < DailyChallenges
@@ -97,7 +98,8 @@ namespace PhotoDuel.Services
         {
             if (duel == null || vote == Vote.None)
             {
-                throw new InvalidOperationException();
+                message = "";
+                return false;
             }
             
             if (_duelService.Vote(duel, user.ToMeta(), vote))
@@ -153,16 +155,7 @@ namespace PhotoDuel.Services
 
         public User LoadUser(string userId)
         {
-            var user = _dbService.ById<User>(userId);
-
-            if (user == null)
-            {
-                user = new User
-                {
-                    Id = userId,
-                    Rating = 0
-                };
-            }
+            var user = _dbService.ById<User>(userId) ?? new User {Id = userId};
 
             var vkUser = _socialService.GetUser(userId);
             user.Name = vkUser.Name;

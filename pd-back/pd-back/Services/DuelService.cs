@@ -19,8 +19,9 @@ namespace PhotoDuel.Services
             _socialService = socialService;
         }
         
-        public Duel LoadAdditional(string duelId, List<Duel> myDuels, out string message)
+        public Duel LoadAdditional(string userId, Vote vote, string duelId, List<Duel> myDuels, out string message)
         {
+            // load duel by id
             Duel additionalDuel = null;
             message = "";
             if (!string.IsNullOrEmpty(duelId))
@@ -34,6 +35,14 @@ namespace PhotoDuel.Services
                         message = "Такой дуэли не существует";
                     }
                 }
+            }
+            
+            // check if add to my
+            var hasCurrent = myDuels.Count(Duel.IsCurrentDuelOf(userId).Compile()) > 0;
+            if (hasCurrent && vote == Models.Vote.None)
+            {
+                message = "Сначала завершите текущую дуэль";
+                myDuels.Add(additionalDuel);
             }
 
             return additionalDuel;
