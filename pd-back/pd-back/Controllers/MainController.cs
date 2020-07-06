@@ -65,7 +65,7 @@ namespace PhotoDuel.Controllers
                 return new InitResponse
                 {
                     User = user,
-                    MyDuels = myDuels.OrderBy(d => (int)d.Status).ThenByDescending(d => d.Creator.Time).ToArray(),
+                    MyDuels = myDuels.OrderBy(d => d.Status).ThenByDescending(d => d.Creator.Time).ToArray(),
                     Pantheon = winners,
                     Categories = _contentService.GetCategories(),
                     Message = message
