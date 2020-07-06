@@ -84,8 +84,8 @@ namespace PhotoDuel.Controllers
             );
         }
 
-        [HttpPost("/public")]
-        public Task Public()
+        [HttpPost("/publish")]
+        public Task Publish()
         {
             return HandleRequest<DuelIdRequest, DuelResponse>(
                 req => new DuelResponse
