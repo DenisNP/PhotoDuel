@@ -27,7 +27,7 @@ namespace PhotoDuel.Services
 
         public User CheckShuffles(User user)
         {
-            var today = DateTime.Today.ToUnixTimeMs();
+            var today = DateTime.UtcNow.Date.ToUnixTimeMs();
             if (user.LastShuffle < today)
             {
                 // full update

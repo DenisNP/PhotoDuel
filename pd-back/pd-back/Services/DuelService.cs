@@ -38,11 +38,17 @@ namespace PhotoDuel.Services
             }
             
             // check if add to my
-            var hasCurrent = myDuels.Count(Duel.IsCurrentDuelOf(userId).Compile()) > 0;
-            if (hasCurrent && vote == Models.Vote.None)
+            if (additionalDuel != null && myDuels.All(d => d.Id != additionalDuel.Id))
             {
-                message = "Сначала завершите текущую дуэль";
-                myDuels.Add(additionalDuel);
+                var hasCurrent = myDuels.Count(Duel.IsCurrentDuelOf(userId).Compile()) > 0;
+                if (hasCurrent && vote == Models.Vote.None)
+                {
+                    message = "Сначала завершите текущую дуэль";
+                }
+                else
+                {
+                    myDuels.Add(additionalDuel);
+                }
             }
 
             return additionalDuel;

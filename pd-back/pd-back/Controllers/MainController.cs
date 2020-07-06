@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using PhotoDuel.Models.Web.Request;
 using PhotoDuel.Models.Web.Response;
 using PhotoDuel.Services;
@@ -66,7 +65,7 @@ namespace PhotoDuel.Controllers
                 return new InitResponse
                 {
                     User = user,
-                    MyDuels = myDuels.OrderBy(d => d.Status).ThenByDescending(d => d.Creator.Time).ToArray(),
+                    MyDuels = myDuels.OrderBy(d => (int)d.Status).ThenByDescending(d => d.Creator.Time).ToArray(),
                     Pantheon = winners,
                     Categories = _contentService.GetCategories(),
                     Message = message
@@ -182,6 +181,9 @@ namespace PhotoDuel.Controllers
             }
             catch (Exception e)
             {
+#if DEBUG
+                throw;
+#endif
                 _logger.LogWarning(e.Message);
                 Response.StatusCode = 400;
                 return Response.WriteAsync(new ErrorResponse(e.Message).ToString());
