@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -21,6 +23,15 @@ namespace PhotoDuel.Models
 
         public int ChallengeId { get; set; } = -1;
         public string ChallengeText { get; set; } = "";
+
+        public static Expression<Func<Duel, bool>> IsCurrentDuelOf(string userId)
+        {
+            return d => d.Status != DuelStatus.Finished
+                        && (
+                            d.Creator.User.Id == userId
+                            || d.Opponent != null && d.Opponent.User.Id == userId
+                        );
+        }
     }
     
     public class Duellist

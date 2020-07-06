@@ -71,16 +71,9 @@ namespace PhotoDuel.Services
             var user = _dbService.ById<User>(userId, false);
 
             // load current duel if it exists
-            var currentDuel = _dbService.Collection<Duel>()
-                .FirstOrDefault(
-                    d => d.Status != DuelStatus.Finished
-                         && (
-                             d.Creator.User.Id == user.Id
-                             || d.Opponent != null && d.Opponent.User.Id == user.Id
-                         )
-                );
+            var currentDuel = _dbService.Collection<Duel>().FirstOrDefault(Duel.IsCurrentDuelOf(userId));
             
-            if (currentDuel != null) throw new InvalidOperationException("There is current duel already");
+            if (currentDuel != null && !currentDuel.IsPublic) throw new InvalidOperationException("There is current duel already");
             if (image.Length > 300) throw new ArgumentException("Image url is too long");
             if (!_contentService.HasChallengeId(challengeId)) throw new ArgumentException("Wrong challengeId");
             
@@ -127,6 +120,10 @@ namespace PhotoDuel.Services
             if (image.Length > 300) throw new ArgumentException("Image url is too long");
             // check if own
             if (duel.Creator.User.Id == userId) throw new InvalidOperationException("This is your own duel");
+            
+            // get current duel
+            var currentDuel = _dbService.Collection<Duel>().FirstOrDefault(Duel.IsCurrentDuelOf(userId));
+            if (currentDuel != null) throw new InvalidOperationException("There is current duel already");
 
             // create new duel object
             duel.Opponent = new Duellist
@@ -155,8 +152,11 @@ namespace PhotoDuel.Services
 
         public Duel MakePublic(string userId, string duelId)
         {
-            // load user
-            var user = _dbService.ById<User>(userId, false);
+            // current duels
+            var currentDuels = _dbService.Collection<Duel>().Where(Duel.IsCurrentDuelOf(userId)).ToList();
+            var hasPublic = currentDuels.Count(d => d.IsPublic) > 0;
+            if (hasPublic) throw new InvalidOperationException("There is already public duel");
+            
             // load duel
             var duel = _dbService.ById<Duel>(duelId, false);
 

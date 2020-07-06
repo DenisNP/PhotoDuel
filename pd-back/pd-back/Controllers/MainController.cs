@@ -75,7 +75,15 @@ namespace PhotoDuel.Controllers
                 }
                 
                 // add additional duel to current
-                if (additionalDuel != null && myDuels.All(d => d.Id != additionalDuel.Id)) myDuels.Add(additionalDuel);
+                if (additionalDuel != null && myDuels.All(d => d.Id != additionalDuel.Id))
+                {
+                    var hasCurrent = myDuels.Count(Duel.IsCurrentDuelOf(user.Id).Compile()) > 0;
+                    if (hasCurrent && req.Vote == Vote.None)
+                    {
+                        message = "Сначала завершите текущую дуэль";
+                        myDuels.Add(additionalDuel);
+                    }
+                }
 
                 // return response
                 return new InitResponse

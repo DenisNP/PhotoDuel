@@ -36,5 +36,24 @@
 				"description": "Выполнить задание 4"
 			}
 		]
+	},
+	{
+		"id": 3,
+		"name": "Категория 3",
+		"image": "http://lorempixel.com/400/200/abstract/",
+		"challenges": [
+			{
+				"id": 3001,
+				"icon": "description",
+				"name": "Задание 5",
+				"description": "Выполнить задание 5"
+			},
+			{
+				"id": 3002,
+				"icon": "event",
+				"name": "Задание 6",
+				"description": "Выполнить задание 6"
+			}
+		]
 	}
 ]

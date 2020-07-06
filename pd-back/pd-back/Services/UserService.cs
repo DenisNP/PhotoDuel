@@ -63,17 +63,24 @@ namespace PhotoDuel.Services
             
             // get public
             var count = _dbService.Collection<Duel>().Count(d => d.IsPublic && d.Status == DuelStatus.Created);
-            var randIndex = _random.Next(count);
-            
-            var publicDuels = _dbService.Collection<Duel>()
-                .Where(d => d.IsPublic && d.Status == DuelStatus.Created)
-                .Skip(randIndex)
-                .Take(1)
-                .ToList();
+            if (count > 0)
+            {
+                var randIndex = _random.Next(count);
 
-            var publicDuel = publicDuels.Count > 0 ? publicDuels.First() : null;
-            user.PublicDuel = publicDuel;
-            
+                var publicDuels = _dbService.Collection<Duel>()
+                    .Where(d => d.IsPublic && d.Status == DuelStatus.Created)
+                    .Skip(randIndex)
+                    .Take(1)
+                    .ToList();
+
+                var publicDuel = publicDuels.Count > 0 ? publicDuels.First() : null;
+                user.PublicDuel = publicDuel;
+            }
+            else
+            {
+                user.PublicDuel = null;
+            }
+
             // update and return
             user.LastShuffle = Utils.Now();
             _dbService.UpdateAsync(user);
@@ -88,6 +95,11 @@ namespace PhotoDuel.Services
 
         public bool TryVote(Duel duel, User user, Vote vote, out string message)
         {
+            if (duel == null || vote == Vote.None)
+            {
+                throw new InvalidOperationException();
+            }
+            
             if (_duelService.Vote(duel, user.ToMeta(), vote))
             {
                 message = "Ваш голос засчитан";
