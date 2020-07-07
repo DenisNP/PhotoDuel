@@ -1,16 +1,16 @@
 <template>
     <div class="tab-challenge">
-        <challenge-lite :challenge-id="1001"/>
+        <user :user="$store.state.user"/>
     </div>
 </template>
 
 <script>
-import ChallengeLite from '../components/ChallengeLite.vue';
+import User from '../components/User.vue';
 
 export default {
     name: 'TabChallenge',
     components: {
-        ChallengeLite,
+        User,
     },
 };
 </script>

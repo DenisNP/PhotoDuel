@@ -54,7 +54,7 @@ namespace PhotoDuel.Services
             return new UserMeta
             {
                 Id = vkUser.Id,
-                Name = vkUser.FullName,
+                Name = vkUser.OnlyName,
                 Photo = vkUser.Photo
             };
         }

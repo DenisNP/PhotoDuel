@@ -16,7 +16,7 @@ export default new Vuex.Store({
                 creator: {
                     user: {
                         id: '463377',
-                        name: 'Денис Пешехонов',
+                        name: 'Денис',
                         photo: 'https://sun9-1.userapi.com/c858416/v858416480/1ae5a1/okte4guqxFM.jpg?ava=1',
                     },
                     image: 'http://lorempixel.com/500/500/',
@@ -34,7 +34,7 @@ export default new Vuex.Store({
             {
                 user: {
                     id: '463377',
-                    name: 'Денис Пешехонов',
+                    name: 'Денис',
                     photo: 'https://sun9-1.userapi.com/c858416/v858416480/1ae5a1/okte4guqxFM.jpg?ava=1',
                 },
                 image: 'http://lorempixel.com/500/500/',
@@ -116,7 +116,7 @@ export default new Vuex.Store({
                 creator: {
                     user: {
                         id: '418997910',
-                        name: 'Пацан Бот',
+                        name: 'Пацан',
                         photo: 'https://vk.com/images/camera_200.png?ava=1',
                     },
                     image: 'http://lorempixel.com/500/500/',
@@ -130,7 +130,7 @@ export default new Vuex.Store({
                 challengeId: 2001,
             },
             id: '463377',
-            name: 'Денис Пешехонов',
+            name: 'Денис',
             photo: 'https://sun9-1.userapi.com/c858416/v858416480/1ae5a1/okte4guqxFM.jpg?ava=1',
         },
     },

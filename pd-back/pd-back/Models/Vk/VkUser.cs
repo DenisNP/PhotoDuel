@@ -17,5 +17,7 @@ namespace PhotoDuel.Models.Vk
         public string Photo { get; set; }
 
         public string FullName => $"{FirstName} {LastName}".Trim();
+
+        public string OnlyName => !string.IsNullOrEmpty(FirstName) ? FirstName : LastName;
     }
 }
