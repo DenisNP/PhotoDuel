@@ -1,16 +1,16 @@
 <template>
     <div class="tab-challenge">
-        <user :user="$store.state.user"/>
+        <duel :duel="$store.state.myDuels[0]"/>
     </div>
 </template>
 
 <script>
-import User from '../components/User.vue';
+import Duel from '../components/Duel.vue';
 
 export default {
     name: 'TabChallenge',
     components: {
-        User,
+        Duel,
     },
 };
 </script>

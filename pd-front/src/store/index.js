@@ -11,7 +11,7 @@ export default new Vuex.Store({
         myDuels: [
             {
                 id: 'lcv5UlIx',
-                status: 'Created',
+                status: 'Started',
                 isPublic: false,
                 creator: {
                     user: {
@@ -24,9 +24,19 @@ export default new Vuex.Store({
                     voters: [],
                     time: 1594072034500,
                 },
-                opponent: null,
+                opponent: {
+                    user: {
+                        id: '463377',
+                        name: 'Денис',
+                        photo: 'https://sun9-1.userapi.com/c858416/v858416480/1ae5a1/okte4guqxFM.jpg?ava=1',
+                    },
+                    image: 'http://lorempixel.com/600/600/',
+                    story: '',
+                    voters: [],
+                    time: 1594072034500,
+                },
                 timeStart: 0,
-                timeFinish: 0,
+                timeFinish: 1594153225000,
                 challengeId: 1001,
             },
         ],
