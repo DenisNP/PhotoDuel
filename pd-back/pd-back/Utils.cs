@@ -30,19 +30,16 @@ namespace PhotoDuel
             return (long)span.TotalMilliseconds;
         }
 
-        public static IList<T> Shuffle<T>(this IList<T> list)  
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> list)  
         {
-            var rng = new Random(); 
-            var n = list.Count;  
-            while (n > 1) {  
-                n--;  
-                var k = rng.Next(n + 1);  
-                var value = list[k];  
-                list[k] = list[n];  
-                list[n] = value;  
+            var rng = new Random();
+            var buffer = list.ToList();
+            for (var i = 0; i < buffer.Count; i++)
+            {
+                var j = rng.Next(i, buffer.Count);
+                yield return buffer[j];
+                buffer[j] = buffer[i];
             }
-
-            return list;
         }
         
         public static string RandomString(int length)

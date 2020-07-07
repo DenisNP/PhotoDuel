@@ -66,7 +66,7 @@ namespace PhotoDuel.Services
 
         public int[] GetRandomCategoryIds(int count)
         {
-            return _categories.Select(x => x.Id).ToList().Shuffle().Take(count).ToArray();
+            return _categories.Select(x => x.Id).Shuffle().Take(count).ToArray();
         }
 
         public int GetCategoryByChallenge(int challengeId)
