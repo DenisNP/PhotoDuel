@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import mutations from './mutations';
 import actions from './actions';
+import getters from './getters';
 
 Vue.use(Vuex);
 
@@ -27,7 +28,6 @@ export default new Vuex.Store({
                 timeStart: 0,
                 timeFinish: 0,
                 challengeId: 1001,
-                challengeText: '',
             },
         ],
         pantheon: [
@@ -45,6 +45,7 @@ export default new Vuex.Store({
             {
                 id: 1,
                 name: 'Категория 1',
+                color: '#ff0000',
                 challenges: [
                     {
                         id: 1001,
@@ -63,6 +64,7 @@ export default new Vuex.Store({
             {
                 id: 2,
                 name: 'Категория 2',
+                color: '#00ff00',
                 challenges: [
                     {
                         id: 2001,
@@ -81,6 +83,7 @@ export default new Vuex.Store({
             {
                 id: 3,
                 name: 'Категория 3',
+                color: '#000ff',
                 challenges: [
                     {
                         id: 3001,
@@ -125,13 +128,13 @@ export default new Vuex.Store({
                 timeStart: 0,
                 timeFinish: 0,
                 challengeId: 2001,
-                challengeText: '',
             },
             id: '463377',
             name: 'Денис Пешехонов',
             photo: 'https://sun9-1.userapi.com/c858416/v858416480/1ae5a1/okte4guqxFM.jpg?ava=1',
         },
     },
+    getters,
     mutations,
     actions,
 });

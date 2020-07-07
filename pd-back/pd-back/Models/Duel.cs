@@ -22,7 +22,7 @@ namespace PhotoDuel.Models
         public long TimeFinish { get; set; }
 
         public int ChallengeId { get; set; } = -1;
-        public string ChallengeText { get; set; } = "";
+        // public string ChallengeText { get; set; } = "";
 
         public static Expression<Func<Duel, bool>> IsCurrentDuelOf(string userId)
         {

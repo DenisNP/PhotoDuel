@@ -1,10 +1,17 @@
 <template>
-    <div class="tab-challenge">Вызов</div>
+    <div class="tab-challenge">
+        <challenge-lite :challenge-id="1001"/>
+    </div>
 </template>
 
 <script>
+import ChallengeLite from '../components/ChallengeLite.vue';
+
 export default {
     name: 'TabChallenge',
+    components: {
+        ChallengeLite,
+    },
 };
 </script>
 

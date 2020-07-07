@@ -2,6 +2,7 @@
 	{
 		"id": 1,
 		"name": "Категория 1",
+		"color": "#ff0000",
 		"image": "http://lorempixel.com/400/200/abstract/",
 		"challenges": [
 			{
@@ -21,6 +22,7 @@
 	{
 		"id": 2,
 		"name": "Категория 2",
+		"color": "#00ff00",
 		"image": "http://lorempixel.com/400/200/abstract/",
 		"challenges": [
 			{
@@ -40,6 +42,7 @@
 	{
 		"id": 3,
 		"name": "Категория 3",
+		"color": "#0000ff",
 		"image": "http://lorempixel.com/400/200/abstract/",
 		"challenges": [
 			{
