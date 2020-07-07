@@ -8,4 +8,21 @@ export default {
         });
         return (id) => challenges[id];
     },
+
+    currentDuels(state) {
+        return state.myDuels.filter(
+            (d) => d.status !== 'Finished'
+                && (
+                    d.creator.user.id === state.user.id
+                    || (
+                        d.opponent !== null
+                        && d.opponent.user.id === state.user.id
+                    )
+                ),
+        );
+    },
+
+    hasCurrentDuels(_, getters) {
+        return getters.currentDuels.length > 0;
+    },
 };

@@ -11,7 +11,7 @@ export default new Vuex.Store({
         myDuels: [
             {
                 id: 'lcv5UlIx',
-                status: 'Started',
+                status: 'Created',
                 isPublic: false,
                 creator: {
                     user: {

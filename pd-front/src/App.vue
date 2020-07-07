@@ -18,6 +18,10 @@ export default {
                         component: Main,
                     },
                 ],
+                dialog: {
+                    buttonOk: 'Да',
+                    buttonCancel: 'Отмена',
+                },
             },
         };
     },
@@ -77,5 +81,9 @@ export default {
     .theme-dark .navbar-large-transparent,
     .theme-dark .navbar-large.navbar-transparent {
         --f7-navbar-large-title-text-color: #fff;
+    }
+
+    .my-text-center {
+        text-align: center;
     }
 </style>
