@@ -2,13 +2,17 @@
     <div class="challenge">
         <div class="category">{{challenge.category}}</div>
         <div class="icon">
-            <f7-icon size="50" :material="challenge.icon" :style="`color: ${challenge.color};`"/>
+            <f7-icon
+                class="icon-inner"
+                :material="challenge.icon"
+                :style="`color: ${challenge.color};`"
+            />
         </div>
         <div class="text">
             <div class="name">
                 {{challenge.name}}
             </div>
-            <div class="description">
+            <div class="description" :class="{'small-text': isLongDescription}">
                 {{challenge.description}}
             </div>
         </div>
@@ -21,6 +25,9 @@ export default {
     computed: {
         challenge() {
             return this.$store.getters.challengeById(this.challengeId);
+        },
+        isLongDescription() {
+            return this.challenge.description.length > 60;
         },
     },
     props: {
@@ -36,7 +43,7 @@ export default {
     .challenge {
         background: white;
         border-radius: 10px;
-        padding: 10px;
+        padding: 7px;
         display: flex;
         align-items: center;
         position: relative;
@@ -60,11 +67,21 @@ export default {
         font-size: 13px;
     }
 
+    .small-text {
+        font-size: 11px;
+    }
+
     .category {
         position: absolute;
         top: 1px;
         right: 4px;
         color: #aaa;
         font-size: 12px;
+    }
+
+    .icon-inner {
+        font-size: 50px;
+        width: 50px;
+        height: 50px;
     }
 </style>

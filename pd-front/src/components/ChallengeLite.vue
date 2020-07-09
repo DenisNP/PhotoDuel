@@ -7,7 +7,7 @@
             <div class="name">
                 {{challenge.name}}
             </div>
-            <div class="description" v-if="!shrank">
+            <div class="description" :class="{'small-text': isLongDescription}" v-if="!shrank">
                 {{challenge.description}}
             </div>
         </div>
@@ -20,6 +20,9 @@ export default {
     computed: {
         challenge() {
             return this.$store.getters.challengeById(this.challengeId);
+        },
+        isLongDescription() {
+            return this.challenge.description.length > 60;
         },
     },
     props: {
@@ -62,5 +65,9 @@ export default {
 
     .description {
         font-size: 13px;
+    }
+
+    .small-text {
+        font-size: 11px;
     }
 </style>

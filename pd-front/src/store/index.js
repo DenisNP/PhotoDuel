@@ -61,13 +61,43 @@ export default new Vuex.Store({
                         id: 1001,
                         icon: 'settings_applications',
                         name: 'Задание 1',
-                        description: 'Выполнить задание 1',
+                        description: 'Выполнить задание 1 Выполнить задание 1 Выполнить задание 1',
                     },
                     {
                         id: 1002,
                         icon: 'settings_backup_restore',
                         name: 'Задание 2',
-                        description: 'Выполнить задание 2',
+                        description: 'Выполнить задание 2 Выполнить задание 2 Выполнить задание 2 Выполнить задание 2 ',
+                    },
+                    {
+                        id: 1003,
+                        icon: 'settings_backup_restore',
+                        name: 'Задание 3',
+                        description: 'Выполнить задание 3',
+                    },
+                    {
+                        id: 1004,
+                        icon: 'settings_backup_restore',
+                        name: 'Задание 4',
+                        description: 'Выполнить задание 4',
+                    },
+                    {
+                        id: 1005,
+                        icon: 'settings_backup_restore',
+                        name: 'Задание 5',
+                        description: 'Выполнить задание 5',
+                    },
+                    {
+                        id: 1006,
+                        icon: 'settings_backup_restore',
+                        name: 'Задание 6',
+                        description: 'Выполнить задание 6',
+                    },
+                    {
+                        id: 1007,
+                        icon: 'settings_backup_restore',
+                        name: 'Задание 7',
+                        description: 'Выполнить задание 7',
                     },
                 ],
             },
@@ -80,7 +110,7 @@ export default new Vuex.Store({
                         id: 2001,
                         icon: 'rowing',
                         name: 'Задание 3',
-                        description: 'Выполнить задание 3',
+                        description: 'Выполнить задание 3 Выпол задание 3 Выполнить задание 3',
                     },
                     {
                         id: 2002,
@@ -93,7 +123,7 @@ export default new Vuex.Store({
             {
                 id: 3,
                 name: 'Категория 3',
-                color: '#000ff',
+                color: '#0000ff',
                 challenges: [
                     {
                         id: 3001,
@@ -115,7 +145,7 @@ export default new Vuex.Store({
             lastShuffle: 1594074756509,
             shufflesLeft: 1,
             challengeIds: [
-                1001,
+                1005,
                 2002,
                 3001,
             ],

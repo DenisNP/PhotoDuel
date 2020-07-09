@@ -3,7 +3,12 @@ export default {
         const challenges = {};
         state.categories.forEach((cat) => {
             cat.challenges.forEach((c) => {
-                challenges[c.id] = { ...c, category: cat.name, color: cat.color };
+                challenges[c.id] = {
+                    ...c,
+                    category: cat.name,
+                    categoryId: cat.id,
+                    color: cat.color,
+                };
             });
         });
         return (id) => challenges[id];

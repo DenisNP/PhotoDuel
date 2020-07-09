@@ -19,7 +19,7 @@
                 icon-material="view_day"
             />
         </f7-toolbar>
-        <f7-tabs class="full-height">
+        <f7-tabs class="full-height" :class="{colorful: title === 'Фотодуэль'}">
             <f7-tab id="tab-pantheon" @tab:show="changeTitle('Работы победителей')">
                 <tab-pantheon/>
             </f7-tab>
@@ -64,6 +64,10 @@ export default {
 
 <style>
     .full-height {
-        height: 100%;
+        min-height: 100%;
+    }
+
+    .colorful {
+        background-color: var(--f7-theme-color);
     }
 </style>
