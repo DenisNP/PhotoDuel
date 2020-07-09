@@ -6,7 +6,7 @@
         </div>
         <div class="pc-data">
             <challenge-lite :challenge-id="duel.challengeId" :no-icon="true"/>
-            <user class="pc-user" :user="duel.creator.user"/>
+            <user class="pc-user" :user="duel.creator.user" no-link/>
         </div>
     </div>
 </template>

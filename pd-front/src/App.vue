@@ -6,6 +6,7 @@
 
 <script>
 import Main from './views/Main.vue';
+import CreateDuel from './views/CreateDuel.vue';
 
 export default {
     data() {
@@ -16,6 +17,10 @@ export default {
                     {
                         path: '/',
                         component: Main,
+                    },
+                    {
+                        path: '/duel/:id',
+                        component: CreateDuel,
                     },
                 ],
                 dialog: {

@@ -3,15 +3,28 @@
         <div v-if="!$store.getters.hasCreatedNonPublic" class="full-height">
             <div class="block-text">Выберите одно из заданий</div>
             <div class="challenge-lines">
-                <challenge-line :challenge-id="challengeIds[0]" class="ch-line"/>
-                <challenge-line :challenge-id="challengeIds[1]" class="ch-line"/>
-                <challenge-line :challenge-id="challengeIds[2]" class="ch-line"/>
+                <challenge-line
+                    :challenge-id="challengeIds[0]"
+                    class="ch-line"
+                    @go="createDuel(challengeIds[0])"
+                />
+                <challenge-line
+                    :challenge-id="challengeIds[1]"
+                    class="ch-line"
+                    @go="createDuel(challengeIds[1])"
+                />
+                <challenge-line
+                    :challenge-id="challengeIds[2]"
+                    class="ch-line"
+                    @go="createDuel(challengeIds[2])"
+                />
             </div>
             <div v-if="publicDuel" class="block-text">Или примите вызов</div>
             <public-challenge
                 class="public-challenge"
                 v-if="publicDuel"
                 :duel="publicDuel"
+                @click.native="joinDuel(publicDuel.id)"
             />
             <f7-button outline color="white" class="shuffle-btn">
                 Перемешать
@@ -43,6 +56,14 @@ export default {
         },
         publicDuel() {
             return this.$store.state.user.publicDuel;
+        },
+    },
+    methods: {
+        createDuel(challengeId) {
+            this.$f7.views.main.router.navigate(`/duel/${challengeId}`);
+        },
+        joinDuel(duelId) {
+            this.$f7.views.main.router.navigate(`/duel/${duelId}`);
         },
     },
     components: {

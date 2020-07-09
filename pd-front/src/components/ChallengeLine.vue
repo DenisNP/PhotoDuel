@@ -5,6 +5,7 @@
             v-for="c in category.challenges"
             :key="c.id"
             :challenge-id="c.id"
+            @click.native="$emit('go')"
         />
     </div>
 </template>

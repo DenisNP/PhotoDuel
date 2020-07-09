@@ -1,5 +1,10 @@
 <template>
-    <f7-link external class="user" :href="`https://vk.com/id${user.id}`" target="_blank">
+    <f7-link
+        :external="!noLink"
+        class="user"
+        :href="noLink ? '' : `https://vk.com/id${user.id}`"
+        target="_blank"
+    >
         <div class="avatar">
             <img :src="user.photo"/>
         </div>
@@ -16,6 +21,10 @@ export default {
         user: {
             type: Object,
             required: true,
+        },
+        noLink: {
+            type: Boolean,
+            default: false,
         },
     },
 };
