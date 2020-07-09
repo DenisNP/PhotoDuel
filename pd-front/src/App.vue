@@ -83,6 +83,23 @@ export default {
         --f7-navbar-large-title-text-color: #fff;
     }
 
+    .md {
+        --f7-navbar-shadow-image: none;
+        --f7-toolbar-bottom-shadow-image: none;
+        --f7-navbar-font-size: 17px;
+        --f7-navbar-title-font-weight: 600;
+        --f7-navbar-title-text-align: center;
+        --f7-font-family: -apple-system, SF Pro Text, SF UI Text, system-ui, Helvetica Neue,
+            Helvetica, Arial, sans-serif;
+        --f7-line-height: 1.4;
+        --f7-text-color: #000;
+    }
+
+    .md .navbar-inner .title {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     .my-text-center {
         text-align: center;
     }

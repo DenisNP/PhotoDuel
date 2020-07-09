@@ -30,14 +30,32 @@
             </div>
         </div>
         <div class="buttons-block" v-if="isCreated">
-            <f7-button v-if="isMine" fill class="duel-btn" icon-material="public" icon-size="20">
+            <f7-button
+                v-if="isMine && !duel.isPublic && !hasOtherCurrent"
+                fill
+                class="duel-btn"
+                icon-material="public"
+                icon-size="20"
+            >
                 Публичный вызов
             </f7-button>
-            <f7-button v-if="isMine" fill class="duel-btn" icon-material="group" icon-size="20">
+            <f7-button
+                v-if="isMine && !duel.isPublic"
+                fill
+                class="duel-btn"
+                icon-material="group"
+                icon-size="20"
+            >
                 Вызов друзьям
             </f7-button>
-            <f7-button v-if="isMine" fill class="duel-btn" icon-material="share" icon-size="20">
-                Отправить ссылку
+            <f7-button
+                v-if="isMine && !duel.isPublic"
+                fill
+                class="duel-btn"
+                icon-material="share"
+                icon-size="20"
+            >
+                Персональный вызов
             </f7-button>
             <f7-button
                 v-if="!isMine && !hasOtherCurrent"
@@ -80,7 +98,10 @@ export default {
     computed: {
         timerText() {
             if (this.duel.status === 'Finished') return 'Завершено';
-            if (this.duel.status === 'Created') return 'Ожидание оппонента';
+            if (this.duel.status === 'Created') {
+                if (this.duel.isPublic) return 'Публичная: ожидание';
+                return 'Отправьте вызов';
+            }
 
             const hours = Math.floor(this.timeLeft / 3600);
             const minutes = Math.floor((this.timeLeft - hours * 3600) / 60);

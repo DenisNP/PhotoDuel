@@ -39,6 +39,36 @@ export default new Vuex.Store({
                 timeFinish: 1594153225000,
                 challengeId: 1001,
             },
+            {
+                id: 'lcv5UlIx1',
+                status: 'Started',
+                isPublic: false,
+                creator: {
+                    user: {
+                        id: '463377',
+                        name: 'Денис',
+                        photo: 'https://sun9-1.userapi.com/c858416/v858416480/1ae5a1/okte4guqxFM.jpg?ava=1',
+                    },
+                    image: 'http://lorempixel.com/500/500/',
+                    story: '',
+                    voters: [],
+                    time: 1594072034500,
+                },
+                opponent: {
+                    user: {
+                        id: '463377',
+                        name: 'Денис',
+                        photo: 'https://sun9-1.userapi.com/c858416/v858416480/1ae5a1/okte4guqxFM.jpg?ava=1',
+                    },
+                    image: 'http://lorempixel.com/600/600/',
+                    story: '',
+                    voters: [],
+                    time: 1594072034500,
+                },
+                timeStart: 0,
+                timeFinish: 1594153225000,
+                challengeId: 1001,
+            },
         ],
         pantheon: [
             {
@@ -173,6 +203,7 @@ export default new Vuex.Store({
             name: 'Денис',
             photo: 'https://sun9-1.userapi.com/c858416/v858416480/1ae5a1/okte4guqxFM.jpg?ava=1',
         },
+        currentTab: 1,
     },
     getters,
     mutations,

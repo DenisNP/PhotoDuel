@@ -30,4 +30,8 @@ export default {
     hasCurrentDuels(_, getters) {
         return getters.currentDuels.length > 0;
     },
+
+    hasCreatedNonPublic(_, getters) {
+        return getters.currentDuels.some((d) => !d.isPublic && d.status === 'Created');
+    },
 };

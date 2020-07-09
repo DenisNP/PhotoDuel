@@ -1,31 +1,52 @@
 <template>
-    <div class="tab-challenge full-height">
-        <div class="block-text">Выберите одно из заданий</div>
-        <div class="challenge-lines">
-            <challenge-line :challenge-id="$store.state.user.challengeIds[0]" class="ch-line"/>
-            <challenge-line :challenge-id="$store.state.user.challengeIds[1]" class="ch-line"/>
-            <challenge-line :challenge-id="$store.state.user.challengeIds[2]" class="ch-line"/>
+    <div class="full-height">
+        <div v-if="!$store.getters.hasCreatedNonPublic" class="full-height">
+            <div class="block-text">Выберите одно из заданий</div>
+            <div class="challenge-lines">
+                <challenge-line :challenge-id="challengeIds[0]" class="ch-line"/>
+                <challenge-line :challenge-id="challengeIds[1]" class="ch-line"/>
+                <challenge-line :challenge-id="challengeIds[2]" class="ch-line"/>
+            </div>
+            <div v-if="publicDuel" class="block-text">Или примите вызов</div>
+            <public-challenge
+                class="public-challenge"
+                v-if="publicDuel"
+                :duel="publicDuel"
+            />
+            <f7-button outline color="white" class="shuffle-btn">
+                Перемешать
+            </f7-button>
+            <div class="empty"/>
         </div>
-        <div v-if="$store.state.user.publicDuel" class="block-text">Или примите вызов</div>
-        <public-challenge
-            class="public-challenge"
-            v-if="$store.state.user.publicDuel"
-            :duel="$store.state.user.publicDuel"
-        />
-        <f7-button outline color="white" class="shuffle-btn">
-            Перемешать
-        </f7-button>
-        <div class="empty"/>
+        <div v-else>
+            <duel
+                v-for="d in $store.getters.currentDuels"
+                :key="d.id"
+                :duel="d"
+                class="duel-block"
+            />
+            <div class="empty"/>
+        </div>
     </div>
 </template>
 
 <script>
 import ChallengeLine from '../components/ChallengeLine.vue';
 import PublicChallenge from '../components/PublicChallenge.vue';
+import Duel from '../components/Duel.vue';
 
 export default {
     name: 'TabChallenge',
+    computed: {
+        challengeIds() {
+            return this.$store.state.user.challengeIds;
+        },
+        publicDuel() {
+            return this.$store.state.user.publicDuel;
+        },
+    },
     components: {
+        Duel,
         ChallengeLine,
         PublicChallenge,
     },
@@ -63,8 +84,16 @@ export default {
         border-radius: 7px;
     }
 
+    .md .shuffle-btn {
+        padding-top: 2px;
+    }
+
     .empty {
         height: 30px;
         width: 1px;
+    }
+
+    .duel-block {
+        margin-bottom: 20px;
     }
 </style>
