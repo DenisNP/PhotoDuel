@@ -29,47 +29,73 @@
                 <user class="user" v-if="duel.opponent" :user="duel.opponent.user"/>
             </div>
         </div>
-        <div class="buttons-block" v-if="isCreated">
+        <div class="buttons-block" v-if="isCreated || isCurrent">
             <f7-button
-                v-if="isMine && !duel.isPublic && !hasOtherCurrent"
+                v-if="isCreated && isMine && !duel.isPublic && !hasOtherCurrent"
                 fill
                 class="duel-btn"
                 icon-material="public"
                 icon-size="20"
+                @click="publish"
             >
                 Публичный вызов
             </f7-button>
             <f7-button
-                v-if="isMine && !duel.isPublic"
+                v-if="isCreated && isMine && !duel.isPublic"
                 fill
                 class="duel-btn"
                 icon-material="group"
                 icon-size="20"
+                @click="inviteFriends"
             >
                 Вызов друзьям
             </f7-button>
             <f7-button
-                v-if="isMine && !duel.isPublic"
+                v-if="isCreated && isMine && !duel.isPublic"
                 fill
                 class="duel-btn"
                 icon-material="share"
                 icon-size="20"
+                @click="sendLink"
             >
                 Персональный вызов
             </f7-button>
             <f7-button
-                v-if="!isMine && !hasOtherCurrent"
+                v-if="isCreated && !isMine && !hasOtherCurrent"
                 fill
                 class="duel-btn"
                 icon-material="local_fire_department"
                 icon-size="20"
+                @click="join"
             >
                 Принять вызов
             </f7-button>
-            <f7-button v-if="!isMine" class="duel-btn-empty" icon-material="clear" icon-size="20">
+            <f7-button
+                v-if="isCurrent"
+                class="play_circle_filled"
+                icon-material="clear"
+                icon-size="20"
+                fill
+                @click="sendVoting"
+            >
+                Запустить голосование
+            </f7-button>
+            <f7-button
+                v-if="isCreated && !isMine"
+                class="duel-btn-empty"
+                icon-material="clear"
+                icon-size="20"
+                @click="reject"
+            >
                 Отклонить вызов
             </f7-button>
-            <f7-button v-if="isMine" class="duel-btn-empty" icon-material="clear" icon-size="20">
+            <f7-button
+                v-if="isCreated && isMine"
+                class="duel-btn-empty"
+                icon-material="clear"
+                icon-size="20"
+                @click="deleteDuel"
+            >
                 Удалить дуэль
             </f7-button>
         </div>
@@ -112,6 +138,16 @@ export default {
         isMine() {
             return this.duel.creator.user.id === this.$store.state.user.id;
         },
+        participateIn() {
+            return this.isMine
+                || (
+                    this.duel.opponent
+                    && this.duel.opponent.user.id === this.$store.state.user.id
+                );
+        },
+        isCurrent() {
+            return this.duel.status === 'Started' && this.participateIn;
+        },
         hasOtherCurrent() {
             return this.$store.getters.currentDuels.length > 1;
         },
@@ -144,6 +180,27 @@ export default {
                     // TODO call api
                 },
             );
+        },
+        publish() {
+            //
+        },
+        inviteFriends() {
+            //
+        },
+        sendLink() {
+            //
+        },
+        join() {
+            //
+        },
+        sendVoting() {
+            //
+        },
+        reject() {
+            //
+        },
+        deleteDuel() {
+            //
         },
     },
     components: {

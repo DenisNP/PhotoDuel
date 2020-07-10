@@ -204,6 +204,7 @@ export default new Vuex.Store({
             photo: 'https://sun9-1.userapi.com/c858416/v858416480/1ae5a1/okte4guqxFM.jpg?ava=1',
         },
         currentTab: 1,
+        isLoading: false,
     },
     getters,
     mutations,
