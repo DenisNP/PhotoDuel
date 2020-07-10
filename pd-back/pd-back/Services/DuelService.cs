@@ -45,6 +45,10 @@ namespace PhotoDuel.Services
                 {
                     message = "Сначала завершите текущую дуэль";
                 }
+                else if (vote == Models.Vote.None && additionalDuel.Status != DuelStatus.Created)
+                {
+                    message = "Этот вызов уже принят, но вы можете создать новый!";
+                }
                 else
                 {
                     myDuels.Add(additionalDuel);
