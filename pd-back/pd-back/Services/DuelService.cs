@@ -81,7 +81,7 @@ namespace PhotoDuel.Services
             return true;
         }
 
-        public Duel CreateDuel(string userId, string image, int challengeId)
+        public Duel CreateDuel(string userId, string image, string photoId, int challengeId)
         {
             var user = _dbService.ById<User>(userId, false);
 
@@ -89,17 +89,17 @@ namespace PhotoDuel.Services
             var currentDuel = _dbService.Collection<Duel>().FirstOrDefault(Duel.IsCurrentDuelOf(userId));
             
             if (currentDuel != null && !currentDuel.IsPublic) throw new InvalidOperationException("There is current duel already");
-            if (image.Length > 300) throw new ArgumentException("Image url is too long");
+            if (image.Length > 300 || photoId.Length > 300) throw new ArgumentException("Image url is too long");
             if (!_contentService.HasChallengeId(challengeId)) throw new ArgumentException("Wrong challengeId");
             
             // create new duel object
             var duel = new Duel
             {
                 ChallengeId = challengeId,
-                // ChallengeText = request.ChallengeText // TODO
                 Creator = new Duellist
                 {
                     Image = image,
+                    PhotoId = photoId,
                     Time = Utils.Now(),
                     User = user.ToMeta(),
                     Voters = new List<UserMeta>()
@@ -119,7 +119,7 @@ namespace PhotoDuel.Services
             return duel;
         }
 
-        public Duel JoinDuel(string userId, string duelId, string image)
+        public Duel JoinDuel(string userId, string duelId, string image, string photoId)
         {
             // load user
             var user = _dbService.ById<User>(userId, false);
@@ -132,7 +132,7 @@ namespace PhotoDuel.Services
             }
             
             // check image
-            if (image.Length > 300) throw new ArgumentException("Image url is too long");
+            if (image.Length > 300 || photoId.Length > 300) throw new ArgumentException("Image url is too long");
             // check if own
             if (duel.Creator.User.Id == userId) throw new InvalidOperationException("This is your own duel");
             
@@ -144,6 +144,7 @@ namespace PhotoDuel.Services
             duel.Opponent = new Duellist
             {
                 Image = image,
+                PhotoId = photoId,
                 Time = Utils.Now(),
                 User = user.ToMeta(),
                 Voters = new List<UserMeta>()

@@ -79,7 +79,7 @@ namespace PhotoDuel.Controllers
             return HandleRequest<CreateDuelRequest, DuelResponse>(
                 req => new DuelResponse
                 {
-                    Duel = _duelService.CreateDuel(req.UserId, req.Image, req.ChallengeId)
+                    Duel = _duelService.CreateDuel(req.UserId, req.Image, req.PhotoId, req.ChallengeId)
                 }
             );
         }
@@ -112,7 +112,7 @@ namespace PhotoDuel.Controllers
             return HandleRequest<JoinDuelRequest, DuelResponse>(
                 req => new DuelResponse
                 {
-                    Duel = _duelService.JoinDuel(req.UserId, req.DuelId, req.Image)
+                    Duel = _duelService.JoinDuel(req.UserId, req.DuelId, req.Image, req.PhotoId)
                 }
             );
         }

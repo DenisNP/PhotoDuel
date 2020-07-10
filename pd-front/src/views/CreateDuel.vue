@@ -93,9 +93,9 @@ export default {
             if (!files.length) return;
 
             const reader = new FileReader();
-            reader.onload = (fe) => {
+            reader.onload = (fr) => {
                 this.$refs.croppieRef.bind({
-                    url: fe.target.result,
+                    url: fr.target.result,
                 });
                 this.imageSelected = true;
             };

@@ -38,6 +38,7 @@ namespace PhotoDuel.Models
     {
         public UserMeta User { get; set; }
         public string Image { get; set; } = "";
+        public string PhotoId { get; set; } = "";
         public string Story { get; set; } = "";
         public List<UserMeta> Voters { get; set; }
         public long Time { get; set; }

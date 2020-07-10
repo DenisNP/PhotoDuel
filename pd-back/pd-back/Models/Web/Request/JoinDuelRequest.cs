@@ -3,5 +3,6 @@
     public class JoinDuelRequest : DuelIdRequest
     {
         public string Image { get; set; }
+        public string PhotoId { get; set; }
     }
 }

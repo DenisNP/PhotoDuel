@@ -3,7 +3,7 @@
     public class CreateDuelRequest : BaseRequest
     {
         public string Image { get; set; }
+        public string PhotoId { get; set; }
         public int ChallengeId { get; set; } = -1;
-        public string ChallengeText { get; set; } = "";
     }
 }
