@@ -15,6 +15,7 @@ export default new Vuex.Store({
         currentTab: 1,
         isLoading: false,
         notifications: false,
+        noInternet: false,
     },
     getters,
     mutations,

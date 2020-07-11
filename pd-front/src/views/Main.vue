@@ -33,7 +33,7 @@
                 class="full-height"
                 :tab-active="currentTab === 1"
             >
-                <tab-challenge/>
+                <tab-challenge @reload="load"/>
             </f7-tab>
             <f7-tab v-show="currentTab === 2" :tab-active="currentTab === 2" class="full-height">
                 <tab-duels/>
@@ -67,10 +67,26 @@ export default {
             return this.currentTab === 1;
         },
     },
+    methods: {
+        async load() {
+            const message = await this.$store.dispatch('init', false);
+            if (message) {
+                this.$f7.toast.create({
+                    text: message,
+                    position: 'center',
+                    cssClass: 'my-text-center',
+                    closeTimeout: 2000,
+                }).open();
+            }
+        },
+    },
     components: {
         TabChallenge,
         TabPantheon,
         TabDuels,
+    },
+    mounted() {
+        this.load();
     },
 };
 </script>

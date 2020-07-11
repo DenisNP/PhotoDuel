@@ -34,23 +34,25 @@ export default {
         isLoading() {
             return this.$store.state.isLoading;
         },
+        noInternet() {
+            return this.$store.state.noInternet;
+        },
     },
     watch: {
         isLoading(l) {
             if (l) this.$f7.preloader.show();
             else this.$f7.preloader.hide();
         },
-    },
-    async mounted() {
-        const message = await this.$store.dispatch('init', false);
-        if (message) {
-            this.$f7.toast.create({
-                text: message,
-                position: 'center',
-                cssClass: 'my-text-center',
-                closeTimeout: 2000,
-            }).open();
-        }
+        noInternet(n) {
+            if (n) {
+                this.$f7.toast.create({
+                    text: 'Проблемы с интернетом, попробуйте позже!',
+                    position: 'center',
+                    cssClass: 'my-text-center',
+                    closeTimeout: 3000,
+                }).open();
+            }
+        },
     },
 };
 </script>

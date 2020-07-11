@@ -103,15 +103,11 @@
 </template>
 
 <script>
+import VKC from '@denisnp/vkui-connect-helper';
 import ChallengeLite from './ChallengeLite.vue';
 import User from './User.vue';
-
-// публиный вызов - created, если ты создатель и нет текущей дуэли
-// вызов друзьям - created, ты создатель, нет текущей дуэли
-// отправить ссылку - created, ты создатель, нет текущей дуэли
-// принять вызов - created, не ты создатель, нет текущей дуэли
-// удалить - created, ты создатель
-// отклонить - created, не ты создатель
+import { getAppId } from '../utils';
+import api from '../api';
 
 export default {
     name: 'Duel',
@@ -163,6 +159,22 @@ export default {
         },
     },
     methods: {
+        showHelp(title, text, onYes, okText) {
+            this.$f7.dialog.confirm(
+                text,
+                title,
+                async () => {
+                    const success = await onYes();
+                    if (!success) return;
+                    this.$f7.toast.create({
+                        text: okText || 'Готово!',
+                        position: 'center',
+                        cssClass: 'my-text-center',
+                        closeTimeout: 1500,
+                    }).open();
+                },
+            );
+        },
         calculateTime() {
             this.timeLeft = Math.floor((this.duel.timeFinish - (new Date()).getTime()) / 1000);
         },
@@ -171,36 +183,65 @@ export default {
                 'Отправить жалобу на неподобающий контент или нарушение правил в этой дуэли?',
                 'Жалоба',
                 () => {
+                    api('report', { duelId: this.duel.id });
+
                     this.$f7.toast.create({
                         text: 'Спасибо! Модераторы рассмотрят вашу жалобу!',
                         position: 'center',
                         cssClass: 'my-text-center',
                         closeTimeout: 1500,
                     }).open();
-                    // TODO call api
                 },
             );
         },
         publish() {
-            //
+            this.showHelp(
+                'Публичный вызов',
+                'Ваш вызов будет предложен случайному пользователю приложения. Продолжаем?',
+                async () => {
+                    const success = await this.$store.dispatch('publish', this.duel.id);
+                    if (success) this.$store.commit('setTab', 2);
+                    return success;
+                },
+                'Теперь дождитесь, когда ваш вызов увидят и примут.',
+            );
         },
         inviteFriends() {
             //
         },
         sendLink() {
-            //
+            this.showHelp(
+                'Персональный вызов',
+                'Вам будет предложено отправить другу ссылку на дуэль. Никто кроме него её не увидит. Отправить?',
+                async () => {
+                    const [result] = await VKC.send(
+                        'VKWebAppShare',
+                        { link: `https://vk.com/app${getAppId()}#${this.duel.id}` },
+                    );
+                    return !!result;
+                },
+                'Теперь дождитесь, когда друг примет вызов',
+            );
         },
         join() {
-            //
+            this.$f7.views.main.router.navigate(`/duel/${this.duel.id}`);
         },
         sendVoting() {
             //
         },
         reject() {
-            //
+            this.showHelp(
+                'Отклонить вызов',
+                'Вызов будет отклонён. Продолжаем?',
+                () => this.$store.dispatch('init', true),
+            );
         },
         deleteDuel() {
-            //
+            this.showHelp(
+                'Удалить дуэль',
+                'Вызов будет необратимо удалён. Продолжаем?',
+                () => this.$store.dispatch('deleteDuel', this.duel.id),
+            );
         },
     },
     components: {

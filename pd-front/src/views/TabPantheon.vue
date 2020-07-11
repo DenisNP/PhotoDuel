@@ -1,5 +1,5 @@
 <template>
-    <div>Пантеон</div>
+    <div></div>
 </template>
 
 <script>

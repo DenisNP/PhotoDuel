@@ -105,14 +105,17 @@ export default {
             reader.readAsDataURL(files[0]);
         },
         async createDuel() {
-            // TODO loader
+            this.$store.commit('setLoading', true);
             const file = await this.$refs.croppieRef.result({
-                type: 'base64',
+                type: 'blob',
                 size: { width: 750, height: 750 },
                 format: 'jpeg',
             });
-            console.log(file);
-            // TODO await call api
+            await this.$store.dispatch('createDuel', {
+                challengeId: this.challengeId,
+                duelId: this.duel && this.duel.id,
+                file,
+            });
             this.$f7.views.main.router.back();
         },
     },

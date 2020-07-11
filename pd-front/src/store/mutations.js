@@ -20,4 +20,23 @@ export default {
     setNotifications(state, notifications) {
         state.notifications = notifications;
     },
+    setNoInternet(state, noInternet) {
+        state.noInternet = noInternet;
+    },
+    setNewMyDuel(state, duel) {
+        const myDuel = state.myDuels.find((d) => d.id === duel.id);
+        if (myDuel) {
+            Object.keys(duel).forEach((k) => {
+                myDuel[k] = duel[k];
+            });
+            return;
+        }
+        state.myDuels.unshift(duel);
+    },
+    deleteDuel(state, duelId) {
+        const myDuelIdx = state.myDuels.findIndex((d) => d.id === duelId);
+        if (myDuelIdx >= 0) {
+            state.myDuels.splice(myDuelIdx, 1);
+        }
+    },
 };

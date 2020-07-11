@@ -50,6 +50,12 @@
             />
             <div class="empty"/>
         </div>
+        <div class="no-internet" v-if="!$store.state.user.id && $store.state.noInternet">
+            <span>Нет интернета</span>
+            <f7-button outline large color="white" @click="$emit('reload')">
+                Перезагрузить
+            </f7-button>
+        </div>
     </div>
 </template>
 
@@ -138,5 +144,18 @@ export default {
 
     .duel-block {
         margin-bottom: 20px;
+    }
+
+    .no-internet {
+        padding: 50px;
+        margin-top: 100px;
+        color: white;
+    }
+
+    .no-internet > span {
+        text-align: center;
+        margin-bottom: 20px;
+        display: block;
+        font-size: 16px;
     }
 </style>

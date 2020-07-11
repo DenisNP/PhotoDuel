@@ -8,6 +8,7 @@ export default {
     async api({ commit }, { method, data, disableLoading }) {
         if (!disableLoading) commit('setLoading', true);
         const result = await api(method, data);
+        commit('setNoInternet', !result);
         if (!disableLoading) commit('setLoading', false);
         return result;
     },
@@ -36,7 +37,7 @@ export default {
         if (!background) {
             VKC.init({
                 appId: getAppId(),
-                accessToken: process.env.VK_DEV_TOKEN,
+                accessToken: isDev() ? process.env.VUE_APP_VK_DEV_TOKEN : '',
                 asyncStyle: true,
                 uploadProxy: isDev() ? 'http://localhost:5000/proxy' : '/proxy',
                 apiVersion: '5.120',
@@ -46,7 +47,6 @@ export default {
 
         const result = await dispatch('api', { method: 'init', data });
         if (!result) {
-            // TODO no internet
             return '';
         }
 
@@ -60,6 +60,50 @@ export default {
 
     async shuffle({ commit, dispatch }) {
         const userResponse = await dispatch('api', { method: 'shuffle', data: {} });
-        if (userResponse) commit('setUser', userResponse.user);
+        if (userResponse && userResponse.user) commit('setUser', userResponse.user);
+    },
+
+    async createDuel({ commit, dispatch }, { challengeId, duelId, file }) {
+        commit('setLoading', true);
+        // TODO write challenge name as caption
+        const [photo] = await VKC.uploadWallPhoto(file, '', '', 'photos');
+        let url = '';
+        if (photo && photo.response && photo.response[0]) {
+            const photoSize = photo.response[0].sizes.find((s) => s.type === 'y');
+            url = (photoSize && photoSize.url) || '';
+        }
+        if (!url) return false;
+
+        const data = {
+            challengeId,
+            duelId,
+            image: url,
+            photoId: '',
+        };
+
+        const duelResponse = await dispatch('api', { method: duelId ? 'join' : 'create', data });
+        if (!duelResponse || !duelResponse.duel) return false;
+
+        commit('setNewMyDuel', duelResponse.duel);
+        commit('setLoading', false);
+        return true;
+    },
+
+    async publish({ commit, dispatch }, duelId) {
+        const duelResponse = await dispatch('api', { method: 'publish', data: { duelId } });
+        if (duelResponse && duelResponse.duel) {
+            commit('setNewMyDuel', duelResponse.duel);
+            return true;
+        }
+        return false;
+    },
+
+    async deleteDuel({ commit, dispatch }, duelId) {
+        const okResponse = await dispatch('api', { method: 'delete', data: { duelId } });
+        if (okResponse && okResponse.ok) {
+            commit('deleteDuel', duelId);
+            return true;
+        }
+        return false;
     },
 };
