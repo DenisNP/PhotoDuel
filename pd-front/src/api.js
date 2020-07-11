@@ -1,4 +1,4 @@
-import { getSearch, isDev } from './utils';
+import { getSearch, getUserId, isDev } from './utils';
 
 export default async (method, data) => {
     const apiAddress = isDev() ? 'http://localhost:5000' : '';
@@ -9,7 +9,7 @@ export default async (method, data) => {
     });
 
     const request = {
-        userId: isDev() ? '463377' : search.get('vk_user_id'),
+        userId: getUserId(),
         sign: search.get('sign') || '',
         params,
     };
