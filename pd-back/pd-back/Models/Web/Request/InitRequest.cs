@@ -5,8 +5,6 @@ namespace PhotoDuel.Models.Web.Request
 {
     public class InitRequest : BaseRequest
     {
-        public string[] FriendIds { get; set; } = new string[0];
-        
         public string DuelId { get; set; } = "";
 
         [JsonConverter(typeof(StringEnumConverter))]

@@ -62,6 +62,8 @@ namespace PhotoDuel.Services
             var challenges = categoryIds.Select(c => _contentService.GetRandomChallenge(c)).ToArray();
             user.ChallengeIds = challenges;
             
+            // TODO force change
+            
             // get public
             var count = _dbService.Collection<Duel>().Count(d => d.IsPublic && d.Status == DuelStatus.Created);
             if (count > 0)

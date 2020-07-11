@@ -16,7 +16,9 @@
         </div>
         <div class="buttons-block">
             <label>
-                <span class="button-dummy" v-if="!imageSelected"/>
+                <span class="button-dummy" v-if="!imageSelected">
+                    Сделайте снимок в соответствии с заданием
+                </span>
                 <f7-button
                     :href="false"
                     external
@@ -175,6 +177,11 @@ export default {
         top: calc(-100vw + 20px);
         background: rgba(0, 0, 0, 0.1);
         z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #888;
+        text-align: center;
     }
 
     .margin-top-btn {

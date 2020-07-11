@@ -1,6 +1,9 @@
 <template>
     <div class="full-height">
-        <div v-if="!$store.getters.hasCreatedNonPublic" class="full-height">
+        <div
+            v-if="!$store.getters.hasCreatedNonPublic && challengeIds && challengeIds.length > 0"
+            class="full-height"
+        >
             <div class="block-text">Выберите одно из заданий</div>
             <div class="challenge-lines">
                 <challenge-line
@@ -26,9 +29,16 @@
                 :duel="publicDuel"
                 @click.native="joinDuel(publicDuel.id)"
             />
-            <f7-button outline color="white" class="shuffle-btn">
+            <f7-button
+                v-if="hasShuffles"
+                outline
+                color="white"
+                class="shuffle-btn"
+                @click="$store.dispatch('shuffle')"
+            >
                 Перемешать
             </f7-button>
+            <div v-else class="non-shuffle-text">Новые задания будут завтра</div>
             <div class="empty"/>
         </div>
         <div v-else>
@@ -52,10 +62,14 @@ export default {
     name: 'TabChallenge',
     computed: {
         challengeIds() {
-            return this.$store.state.user.challengeIds;
+            return (this.$store.state.user && this.$store.state.user.challengeIds) || [];
         },
         publicDuel() {
             return this.$store.state.user.publicDuel;
+        },
+        hasShuffles() {
+            if (!this.$store.state.user) return false;
+            return this.$store.state.user.shufflesLeft > 0;
         },
     },
     methods: {
@@ -103,6 +117,14 @@ export default {
         height: 40px;
         padding-top: 5px;
         border-radius: 7px;
+    }
+
+    .non-shuffle-text {
+        margin: 30px 30px 0 30px;
+        padding-top: 5px;
+        text-align: center;
+        color: white;
+        font-size: 14px;
     }
 
     .md .shuffle-btn {

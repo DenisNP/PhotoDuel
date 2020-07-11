@@ -30,17 +30,57 @@ export default {
             },
         };
     },
+    computed: {
+        isLoading() {
+            return this.$store.state.isLoading;
+        },
+    },
+    watch: {
+        isLoading(l) {
+            if (l) this.$f7.preloader.show();
+            else this.$f7.preloader.hide();
+        },
+    },
+    async mounted() {
+        const message = await this.$store.dispatch('init', false);
+        if (message) {
+            this.$f7.toast.create({
+                text: message,
+                position: 'center',
+                cssClass: 'my-text-center',
+                closeTimeout: 2000,
+            }).open();
+        }
+    },
 };
 </script>
 
 <style>
+    body {
+        -webkit-user-select: none;
+        user-select: none;
+        overscroll-behavior-y: none;
+    }
+
+    html,
+    body {
+        position: fixed;
+        overflow: hidden;
+    }
+
     /* Custom color theme */
     :root {
         --f7-theme-color: #EB643A;
         --f7-theme-color-rgb: 235, 100, 58;
         --f7-theme-color-shade: #e54817;
         --f7-theme-color-tint: #ef815f;
+        /*--f7-preloader-modal-bg-color: rgba(220, 220, 220, 1)!important;*/
     }
+
+    .preloader[class*="color-"] {
+        /*--f7-preloader-color: var(--f7-theme-color-shade)!important;*/
+    }
+
     /* Invert navigation bars to fill style */
     :root,
     :root.theme-dark,
