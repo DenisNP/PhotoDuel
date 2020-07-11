@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@denisnp/vkui-connect-helper": "^0.1.4",
+    "@denisnp/vkui-connect-helper": "^0.1.5",
     "core-js": "^3.6.5",
     "croppie": "^2.6.5",
     "framework7": "^5.7.8",

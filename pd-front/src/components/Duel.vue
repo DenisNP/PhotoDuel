@@ -201,7 +201,7 @@ export default {
                 async () => {
                     const success = await this.$store.dispatch('publish', this.duel.id);
                     if (success) this.$store.commit('setTab', 2);
-                    return success;
+                    return success && !this.requestNotify();
                 },
                 'Теперь дождитесь, когда ваш вызов увидят и примут.',
             );
@@ -218,7 +218,7 @@ export default {
                         'VKWebAppShare',
                         { link: `https://vk.com/app${getAppId()}#${this.duel.id}` },
                     );
-                    return !!result;
+                    return result && !this.requestNotify();
                 },
                 'Теперь дождитесь, когда друг примет вызов',
             );
@@ -242,6 +242,17 @@ export default {
                 'Вызов будет необратимо удалён. Продолжаем?',
                 () => this.$store.dispatch('deleteDuel', this.duel.id),
             );
+        },
+        requestNotify() {
+            if (this.$store.notifications) return false;
+            this.$store.commit('setNotifications', true);
+
+            this.$f7.dialog.confirm(
+                'Активируйте уведомления, чтобы узнать, когда ваш вызов примут.',
+                'Отправка вызова',
+                () => VKC.send('VKWebAppAllowNotifications', {}),
+            );
+            return true;
         },
     },
     components: {

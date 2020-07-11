@@ -29,7 +29,7 @@ export default {
         commit('setNotifications', notifications);
     },
 
-    async init({ commit, dispatch }, background) {
+    async init({ state, commit, dispatch }, background) {
         const data = {
             vote: 'None',
             duelId: '',
@@ -42,12 +42,19 @@ export default {
                 uploadProxy: isDev() ? 'http://localhost:5000/proxy' : '/proxy',
                 apiVersion: '5.120',
             });
+            VKC.bridge().send(
+                'VKWebAppSetViewSettings',
+                { status_bar_style: 'dark', action_bar_color: '#EB643A' },
+            );
             dispatch('load', data);
         }
 
         const result = await dispatch('api', { method: 'init', data });
         if (!result) {
-            return '';
+            return {
+                requestNotify: false,
+                message: '',
+            };
         }
 
         if (result.categories) commit('setCategories', result.categories);
@@ -55,7 +62,16 @@ export default {
         if (result.pantheon) commit('setPantheon', result.pantheon);
         if (result.user) commit('setUser', result.user);
 
-        return result.message || '';
+        let requestNotify = false;
+        if (result.voted) {
+            commit('setTab', 2);
+            if (!state.notifications) requestNotify = true;
+        }
+
+        return {
+            requestNotify,
+            message: result.message || '',
+        };
     },
 
     async shuffle({ commit, dispatch }) {

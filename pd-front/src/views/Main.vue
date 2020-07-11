@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import VKC from '@denisnp/vkui-connect-helper';
 import TabChallenge from './TabChallenge.vue';
 import TabPantheon from './TabPantheon.vue';
 import TabDuels from './TabDuels.vue';
@@ -69,15 +70,27 @@ export default {
     },
     methods: {
         async load() {
-            const message = await this.$store.dispatch('init', false);
-            if (message) {
-                this.$f7.toast.create({
-                    text: message,
-                    position: 'center',
-                    cssClass: 'my-text-center',
-                    closeTimeout: 2000,
-                }).open();
+            const { message, requestNotify } = await this.$store.dispatch('init', false);
+            if (requestNotify) {
+                this.$f7.dialog.confirm(
+                    'Ваш голос засчитан. Мы можем отправить вам уведомление с результатами, когда дуэль закончится. Хотите?',
+                    'Голосование',
+                    async () => {
+                        const [result] = await VKC.send('VKWebAppAllowNotifications', {});
+                        if (result) this.toast(message);
+                    },
+                );
+            } else if (message) {
+                this.toast(message);
             }
+        },
+        toast(message) {
+            this.$f7.toast.create({
+                text: message,
+                position: 'center',
+                cssClass: 'my-text-center',
+                closeTimeout: 2000,
+            }).open();
         },
     },
     components: {

@@ -65,13 +65,17 @@ namespace PhotoDuel.Services
             // TODO force change
             
             // get public
-            var count = _dbService.Collection<Duel>().Count(d => d.IsPublic && d.Status == DuelStatus.Created);
+            var count = _dbService.Collection<Duel>().Count(
+                d => d.IsPublic
+                     && d.Status == DuelStatus.Created
+                     && d.Creator.User.Id != user.Id
+            );
             if (count > 0)
             {
                 var randIndex = _random.Next(count);
 
                 var publicDuels = _dbService.Collection<Duel>()
-                    .Where(d => d.IsPublic && d.Status == DuelStatus.Created)
+                    .Where(d => d.IsPublic && d.Status == DuelStatus.Created && d.Creator.User.Id != user.Id)
                     .Skip(randIndex)
                     .Take(1)
                     .ToList();
