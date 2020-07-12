@@ -32,6 +32,7 @@
             <f7-button
                 v-if="hasShuffles"
                 outline
+                large
                 color="white"
                 class="shuffle-btn"
                 @click="$store.dispatch('shuffle')"
@@ -125,9 +126,9 @@ export default {
     .shuffle-btn {
         margin: 30px auto 0 auto;
         width: 200px;
-        height: 40px;
-        padding-top: 5px;
-        border-radius: 7px;
+        /*height: 40px;*/
+        /*padding-top: 5px;*/
+        /*border-radius: 7px;*/
     }
 
     .non-shuffle-text {

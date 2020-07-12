@@ -44,18 +44,13 @@ export default {
             });
 
             // set bar color
-            try {
-                await VKC.bridge().send(
-                    'VKWebAppSetViewSettings',
-                    { status_bar_style: 'dark', action_bar_color: '#EB643A' },
-                );
-            } catch (e) {
-                console.log('No mobile client detected');
-            }
+            VKC.bridge().send(
+                'VKWebAppSetViewSettings',
+                { status_bar_style: 'dark', action_bar_color: '#EB643A' },
+            );
 
             // load
             dispatch('load', data);
-
             // reload on restore from cache
             VKC.subscribe((evt) => {
                 if (evt.detail && evt.detail.type === 'VKWebAppViewRestore') {

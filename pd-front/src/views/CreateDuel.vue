@@ -46,7 +46,7 @@
                 :disabled="!imageSelected"
                 @click="createDuel"
             >
-                {{duel ? 'Создать' : 'Принять'}} вызов
+                {{duel ? 'Принять' : 'Создать'}} вызов
             </f7-button>
             <f7-button
                 :href="false"

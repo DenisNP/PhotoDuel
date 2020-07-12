@@ -79,8 +79,8 @@
             </f7-button>
             <f7-button
                 v-if="isCurrent"
-                class="play_circle_filled"
-                icon-material="clear"
+                class="duel-btn"
+                icon-material="play_circle_filled"
                 icon-size="20"
                 fill
                 @click="sendVoting"
