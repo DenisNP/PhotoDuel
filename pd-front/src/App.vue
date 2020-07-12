@@ -226,8 +226,9 @@ export default {
 
     .onboarding-slide {
         width: calc(100vw - 80px);
-        height: calc(100vh - 120px);
-        margin-top: 20px;
+        height: calc(100vh - 120px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+        max-height: 140vw;
+        margin-top: calc(20px + env(safe-area-inset-top));
         margin-left: 20px;
         background: white;
         border-radius: 15px;
@@ -254,6 +255,7 @@ export default {
     .ob-small {
         font-size: 14px;
         margin-top: 15px;
+        margin-bottom: 5px;
         display: block;
     }
 
