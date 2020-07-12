@@ -42,6 +42,8 @@ export default {
                 uploadProxy: isDev() ? 'http://localhost:5000/proxy' : '/proxy',
                 apiVersion: '5.120',
             });
+
+            // set bar color
             try {
                 await VKC.bridge().send(
                     'VKWebAppSetViewSettings',
@@ -50,7 +52,16 @@ export default {
             } catch (e) {
                 console.log('No mobile client detected');
             }
+
+            // load
             dispatch('load', data);
+
+            // reload on restore from cache
+            VKC.subscribe((evt) => {
+                if (evt.detail && evt.detail.type === 'VKWebAppViewRestore') {
+                    dispatch('init', false);
+                }
+            });
         }
 
         const result = await dispatch('api', { method: 'init', data });
