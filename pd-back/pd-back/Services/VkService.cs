@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using Newtonsoft.Json;
 using PhotoDuel.Models;
 using PhotoDuel.Models.Vk;
@@ -67,14 +68,10 @@ namespace PhotoDuel.Services
 #endif            
             var parsString = string.Join(
                 "&",
-                pars.Select(kv => $"{kv.Key}={kv.Value}").OrderBy(x => x)
+                pars.Select(kv => $"{kv.Key}={HttpUtility.UrlEncode(kv.Value)}").OrderBy(x => x)
             );
-            Console.WriteLine(parsString);
 
             var calculatedSign = Utils.ToBase64(Utils.HashHMAC(_vkApiSecret, parsString));
-            Console.WriteLine(calculatedSign);
-            Console.WriteLine(sign);
-            Console.WriteLine(calculatedSign == sign);
             return calculatedSign == sign && pars.ContainsKey("vk_user_id") && pars["vk_user_id"] == userId;
         }
 

@@ -71,8 +71,7 @@ namespace PhotoDuel
         {
             var encoding = new UTF8Encoding();
             var hash = new HMACSHA256(encoding.GetBytes(key));
-            var result = hash.ComputeHash(encoding.GetBytes(message));
-            return result;
+            return hash.ComputeHash(encoding.GetBytes(message));
         }
         
         public static string ToBase64(byte[] hash)
