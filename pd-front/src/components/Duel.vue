@@ -185,7 +185,8 @@ export default {
             );
         },
         calculateTime() {
-            this.timeLeft = Math.floor((this.duel.timeFinish - (new Date()).getTime()) / 1000);
+            const timeLeft = Math.floor((this.duel.timeFinish - (new Date()).getTime()) / 1000);
+            this.timeLeft = timeLeft >= 0 ? timeLeft : 0;
         },
         report() {
             this.$f7.dialog.confirm(
