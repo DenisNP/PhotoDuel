@@ -357,7 +357,7 @@ export default {
 
     .user {
         margin-left: 5px;
-        max-width: 32vw;
+        max-width: calc(32vw - 5px);
         overflow: hidden;
     }
 
