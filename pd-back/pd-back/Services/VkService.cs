@@ -26,7 +26,6 @@ namespace PhotoDuel.Services
 
         public void Notify(string[] allUserIds, string message, string hash = "")
         {
-            Console.WriteLine("notify started: " + string.Join(",", allUserIds) + ", " + message);
             var uids = allUserIds.ToList();
             while (uids.Count > 0)
             {
@@ -69,12 +68,8 @@ namespace PhotoDuel.Services
                 "&",
                 pars.Select(kv => $"{kv.Key}={Uri.EscapeDataString(kv.Value)}").OrderBy(x => x)
             );
-            Console.WriteLine(parsString);
 
             var calculatedSign = Utils.ToBase64(Utils.HashHMAC(_vkApiSecret, parsString));
-            Console.WriteLine(calculatedSign);
-            Console.WriteLine(sign);
-            Console.WriteLine(calculatedSign == sign);
             return calculatedSign == sign && pars.ContainsKey("vk_user_id") && pars["vk_user_id"] == userId;
         }
 

@@ -84,9 +84,9 @@ namespace PhotoDuel
                 .Replace('/', '_');
         }
 
-        public static IEnumerable<T> Shift<T>(this List<T> list, int count)
+        public static List<T> Shift<T>(this List<T> list, int count)
         {
-            var items = list.Take(count);
+            var items = list.Take(count).ToList();
             list.RemoveRange(0, Math.Min(count, list.Count));
             return items;
         }
