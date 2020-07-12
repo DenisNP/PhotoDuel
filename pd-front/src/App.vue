@@ -226,9 +226,9 @@ export default {
 
     .onboarding-slide {
         width: calc(100vw - 80px);
-        height: calc(100vh - 160px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+        height: calc(100vh - 155px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
         max-height: 140vw;
-        margin-top: calc(60px + env(safe-area-inset-top));
+        margin-top: calc(55px + env(safe-area-inset-top));
         margin-left: 20px;
         background: white;
         border-radius: 15px;
