@@ -1,3 +1,4 @@
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -15,6 +16,7 @@ namespace PhotoDuel
             new WebHostBuilder()
                 .UseKestrel()
                 .UseStartup<Startup>()
+                .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureLogging(build =>
                 {
                     build

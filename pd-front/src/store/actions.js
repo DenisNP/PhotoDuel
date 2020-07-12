@@ -1,7 +1,7 @@
 import VKC from '@denisnp/vkui-connect-helper';
 import api from '../common/api';
 import {
-    getAppId, getHash, getSearch, isDev,
+    getAppId, getHash, getSearch, isDev, getPlatform,
 } from '../common/utils';
 
 export default {
@@ -37,15 +37,19 @@ export default {
         if (!background) {
             VKC.init({
                 appId: getAppId(),
-                accessToken: isDev() ? process.env.VUE_APP_VK_DEV_TOKEN : '',
+                accessToken: getPlatform() === 'local' ? process.env.VUE_APP_VK_DEV_TOKEN : '',
                 asyncStyle: true,
                 uploadProxy: isDev() ? 'http://localhost:5000/proxy' : '/proxy',
                 apiVersion: '5.120',
             });
-            VKC.bridge().send(
-                'VKWebAppSetViewSettings',
-                { status_bar_style: 'dark', action_bar_color: '#EB643A' },
-            );
+            try {
+                await VKC.bridge().send(
+                    'VKWebAppSetViewSettings',
+                    { status_bar_style: 'dark', action_bar_color: '#EB643A' },
+                );
+            } catch (e) {
+                console.log('No mobile client detected');
+            }
             dispatch('load', data);
         }
 

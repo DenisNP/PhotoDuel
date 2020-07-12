@@ -27,6 +27,7 @@ namespace PhotoDuel
         public void Configure(IApplicationBuilder app, IDbService dbService, ContentService contentService)
         {
             app.UseRouting();
+            app.UseFileServer();
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
             

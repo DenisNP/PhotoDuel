@@ -5,9 +5,20 @@ export const getSearch = () => {
     return new URLSearchParams(search ? search.slice(1) : '');
 };
 
-export const getUserId = () => (isDev() ? '463377' : getSearch().get('vk_user_id'));
+export const getUserId = () => {
+    const uidGot = getSearch().get('vk_user_id') || '';
+    return (!uidGot && isDev() ? '463377' : uidGot);
+};
 
-export const getAppId = () => (isDev() ? '7402641' : getSearch().get('vk_app_id'));
+export const getAppId = () => {
+    const aidGot = getSearch().get('vk_app_id') || '';
+    return (!aidGot && isDev() ? '7402641' : aidGot);
+};
+
+export const getPlatform = () => {
+    const p = getSearch().get('vk_platform');
+    return (!p && isDev() ? 'local' : p);
+};
 
 export const getHash = () => {
     const { hash } = window.location;
