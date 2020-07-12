@@ -1,6 +1,13 @@
 <template>
     <div class="duel-container">
         <challenge-lite class="challenge" :challenge-id="duel.challengeId"/>
+        <div class="draw-container" v-show="showDrawContainer">
+            <challenge-lite
+                class="draw-challenge"
+                ref="challengeContainer"
+                :challenge-id="duel.challengeId"
+            />
+        </div>
         <f7-button icon-material="report" color="gray" class="report-btn" @click="report"/>
         <div class="photo-block">
             <div class="duellist">
@@ -106,8 +113,9 @@
 import VKC from '@denisnp/vkui-connect-helper';
 import ChallengeLite from './ChallengeLite.vue';
 import User from './User.vue';
-import { getAppId } from '../utils';
-import api from '../api';
+import { getAppId } from '../common/utils';
+import api from '../common/api';
+import { createSoloStory, createVoteStory } from '../common/storyCreator';
 
 export default {
     name: 'Duel',
@@ -115,6 +123,7 @@ export default {
         return {
             timer: -1,
             timeLeft: 0,
+            showDrawContainer: false,
         };
     },
     computed: {
@@ -207,12 +216,23 @@ export default {
             );
         },
         inviteFriends() {
-            //
+            this.$store.commit('setLoading', true);
+            this.showDrawContainer = true;
+            this.$nextTick(async () => {
+                await createSoloStory(
+                    this.duel.creator.image,
+                    this.$refs.challengeContainer.$el,
+                    this.duel.id,
+                );
+                this.showDrawContainer = false;
+                this.$store.commit('setLoading', false);
+            });
+            return false;
         },
         sendLink() {
             this.showHelp(
                 'Персональный вызов',
-                'Вам будет предложено отправить другу ссылку на дуэль. Никто кроме него её не увидит. Отправить?',
+                'Выбранный вами друг получит прямую ссылку на дуэль и сможет принять вызов. Продолжить?',
                 async () => {
                     const [result] = await VKC.send(
                         'VKWebAppShare',
@@ -227,7 +247,19 @@ export default {
             this.$f7.views.main.router.navigate(`/duel/${this.duel.id}`);
         },
         sendVoting() {
-            //
+            this.$store.commit('setLoading', true);
+            this.showDrawContainer = true;
+            this.$nextTick(async () => {
+                await createVoteStory(
+                    this.duel.creator.image,
+                    this.duel.opponent.image,
+                    this.$refs.challengeContainer.$el,
+                    this.duel.id,
+                );
+                this.showDrawContainer = false;
+                this.$store.commit('setLoading', false);
+            });
+            return false;
         },
         reject() {
             this.showHelp(
@@ -377,6 +409,19 @@ export default {
         color: darkgreen;
         background: white;
         border-radius: 50%;
+    }
+
+    .draw-container {
+        width: 0;
+        height: 0;
+        overflow: hidden;
+    }
+
+    .draw-challenge {
+        width: 335px;
+        height: 57px;
+        padding: 0!important;
+        margin: 0!important;
     }
 </style>
 

@@ -1,8 +1,8 @@
 import VKC from '@denisnp/vkui-connect-helper';
-import api from '../api';
+import api from '../common/api';
 import {
     getAppId, getHash, getSearch, isDev,
-} from '../utils';
+} from '../common/utils';
 
 export default {
     async api({ commit }, { method, data, disableLoading }) {

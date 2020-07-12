@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using PhotoDuel.Models;
 using PhotoDuel.Models.Web.Request;
 using PhotoDuel.Models.Web.Response;
 using PhotoDuel.Services;
@@ -60,7 +59,7 @@ namespace PhotoDuel.Controllers
 
                 // check if voting or load duel by link
                 var additionalDuel = _duelService.LoadAdditional(req.UserId, req.Vote, req.DuelId, myDuels, out var message);
-                _userService.TryVote(additionalDuel, user, req.Vote, out var voteMessage);
+                var voted = _userService.TryVote(additionalDuel, user, req.Vote, out var voteMessage);
 
                 // return response
                 return new InitResponse
@@ -69,7 +68,8 @@ namespace PhotoDuel.Controllers
                     MyDuels = myDuels.OrderBy(d => d.Status).ThenByDescending(d => d.Creator.Time).ToArray(),
                     Pantheon = winners,
                     Categories = _contentService.GetCategories(),
-                    Message = string.IsNullOrEmpty(voteMessage) ? message : voteMessage
+                    Message = string.IsNullOrEmpty(voteMessage) ? message : voteMessage,
+                    Voted = voted
                 };
             });
         }

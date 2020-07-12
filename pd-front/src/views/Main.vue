@@ -73,12 +73,9 @@ export default {
             const { message, requestNotify } = await this.$store.dispatch('init', false);
             if (requestNotify) {
                 this.$f7.dialog.confirm(
-                    'Ваш голос засчитан. Мы можем отправить вам уведомление с результатами, когда дуэль закончится. Хотите?',
+                    'Ваш голос засчитан. Отправить вам уведомление с результатами, когда дуэль закончится?',
                     'Голосование',
-                    async () => {
-                        const [result] = await VKC.send('VKWebAppAllowNotifications', {});
-                        if (result) this.toast(message);
-                    },
+                    () => VKC.send('VKWebAppAllowNotifications', {}),
                 );
             } else if (message) {
                 this.toast(message);

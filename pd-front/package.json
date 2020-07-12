@@ -13,6 +13,7 @@
     "croppie": "^2.6.5",
     "framework7": "^5.7.8",
     "framework7-vue": "^5.7.8",
+    "html2canvas": "^1.0.0-rc.5",
     "vue": "^2.6.11",
     "vue-croppie": "^2.0.2",
     "vue-router": "^3.2.0",
