@@ -164,7 +164,7 @@ namespace PhotoDuel.Services
             );
             
             // write to db
-            _dbService.Update(duel);
+            _dbService.UpdateAsync(duel);
 
             // return
             return duel;
