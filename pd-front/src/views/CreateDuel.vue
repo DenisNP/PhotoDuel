@@ -27,7 +27,7 @@
                     icon-material="camera_alt"
                     class="my-icon"
                 >
-                    Выбрать фото
+                    {{imageSelected ? 'Изменить' : 'Выбрать'}} фото
                 </f7-button>
                 <input
                     @change="photoSelected"
@@ -46,7 +46,7 @@
                 :disabled="!imageSelected"
                 @click="createDuel"
             >
-                Создать вызов
+                {{duel ? 'Создать' : 'Принять'}} вызов
             </f7-button>
             <f7-button
                 :href="false"
@@ -111,12 +111,12 @@ export default {
                 size: { width: 750, height: 750 },
                 format: 'jpeg',
             });
-            await this.$store.dispatch('createDuel', {
+            const created = await this.$store.dispatch('createDuel', {
                 challengeId: this.challengeId,
                 duelId: this.duel && this.duel.id,
                 file,
             });
-            this.$f7.views.main.router.back();
+            if (created) this.$f7.views.main.router.back();
         },
     },
     props: {

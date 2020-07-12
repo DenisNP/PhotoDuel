@@ -45,7 +45,7 @@ export const createSoloStory = async (imageUrl, challengeElement, duelId) => {
                     url: `${window.location.origin}/${stickerBtn}`,
                     transform: {
                         rotation: 0,
-                        relation_width: 0,
+                        relation_width: 0.68,
                         translation_x: 0,
                         translation_y: 0.7,
                         gravity: 'center',

@@ -103,7 +103,10 @@ export default {
             const photoSize = photo.response[0].sizes.find((s) => s.type === 'y');
             url = (photoSize && photoSize.url) || '';
         }
-        if (!url) return false;
+        if (!url) {
+            commit('setLoading', false);
+            return false;
+        }
 
         const data = {
             challengeId,
@@ -113,7 +116,10 @@ export default {
         };
 
         const duelResponse = await dispatch('api', { method: duelId ? 'join' : 'create', data });
-        if (!duelResponse || !duelResponse.duel) return false;
+        if (!duelResponse || !duelResponse.duel) {
+            commit('setLoading', false);
+            return false;
+        }
 
         commit('setNewMyDuel', duelResponse.duel);
         commit('setLoading', false);

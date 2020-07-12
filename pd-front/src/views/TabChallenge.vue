@@ -1,7 +1,7 @@
 <template>
     <div class="full-height">
         <div
-            v-if="!$store.getters.hasCreatedNonPublic && challengeIds && challengeIds.length > 0"
+            v-if="showChallenges"
             class="full-height"
         >
             <div class="block-text">Выберите одно из заданий</div>
@@ -76,6 +76,11 @@ export default {
         hasShuffles() {
             if (!this.$store.state.user) return false;
             return this.$store.state.user.shufflesLeft > 0;
+        },
+        showChallenges() {
+            return !this.$store.getters.hasCurrentDuels
+                && this.challengeIds
+                && this.challengeIds.length > 0;
         },
     },
     methods: {
