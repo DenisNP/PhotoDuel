@@ -219,11 +219,12 @@ export default {
             this.$store.commit('setLoading', true);
             this.showDrawContainer = true;
             this.$nextTick(async () => {
-                await createSoloStory(
+                const storyData = await createSoloStory(
                     this.duel.creator.image,
                     this.$refs.challengeContainer.$el,
                     this.duel.id,
                 );
+                await VKC.send('VKWebAppShowStoryBox', storyData);
                 this.showDrawContainer = false;
                 this.$store.commit('setLoading', false);
             });
@@ -250,12 +251,14 @@ export default {
             this.$store.commit('setLoading', true);
             this.showDrawContainer = true;
             this.$nextTick(async () => {
-                await createVoteStory(
+                const storyData = await createVoteStory(
                     this.duel.creator.image,
                     this.duel.opponent.image,
                     this.$refs.challengeContainer.$el,
                     this.duel.id,
                 );
+                await VKC.send('VKWebAppShowStoryBox', storyData);
+                // TODO send story
                 this.showDrawContainer = false;
                 this.$store.commit('setLoading', false);
             });

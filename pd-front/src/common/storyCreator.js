@@ -1,7 +1,9 @@
 import html2canvas from 'html2canvas';
-import { drawImage } from './utils';
+import { drawImage, getAppId } from './utils';
 import soloBg from '../assets/story_single.jpg';
 import voteBg from '../assets/story_bg.jpg';
+import stickerBtn from '../assets/join_button.png';
+import stickerVote from '../assets/stories_sticker.png';
 
 const cWidth = 830;
 const cHeight = 142;
@@ -30,8 +32,41 @@ const createSoloCanvas = async (imageUrl, challengeElement) => {
 };
 
 export const createSoloStory = async (imageUrl, challengeElement, duelId) => {
-    console.log(duelId);
-    console.log(await createSoloCanvas(imageUrl, challengeElement));
+    const dataUrl = await createSoloCanvas(imageUrl, challengeElement);
+    return {
+        background_type: 'image',
+        blob: dataUrl,
+        locked: true,
+        stickers: [
+            {
+                sticker_type: 'renderable',
+                sticker: {
+                    content_type: 'image',
+                    url: `${window.location.origin}/${stickerBtn}`,
+                    transform: {
+                        rotation: 0,
+                        relation_width: 0,
+                        translation_x: 0,
+                        translation_y: 0.7,
+                        gravity: 'center',
+                    },
+                    clickable_zones: [
+                        {
+                            action_type: 'link',
+                            action: {
+                                link: `https://vk.com/app${getAppId()}#${duelId}`,
+                            },
+                            // eslint-disable-next-line max-len
+                            clickable_area: [{ x: 13, y: 134 }, { x: 664, y: 134 }, { x: 664, y: 260 }, { x: 13, y: 260 }],
+                        },
+                    ],
+                    original_width: 1000,
+                    original_height: 1900,
+                    can_delete: true,
+                },
+            },
+        ],
+    };
 };
 
 const createVoteCanvas = async (firstImgUrl, secondImgUrl, challengeElement) => {
@@ -57,6 +92,48 @@ const createVoteCanvas = async (firstImgUrl, secondImgUrl, challengeElement) => 
 };
 
 export const createVoteStory = async (firstImgUrl, secondImgUrl, challengeElement, duelId) => {
-    console.log(duelId);
-    console.log(await createVoteCanvas(firstImgUrl, secondImgUrl, challengeElement));
+    const dataUrl = await createVoteCanvas(firstImgUrl, secondImgUrl, challengeElement);
+    const appId = getAppId();
+    return {
+        background_type: 'image',
+        blob: dataUrl,
+        locked: true,
+        stickers: [
+            {
+                sticker_type: 'renderable',
+                sticker: {
+                    content_type: 'image',
+                    url: `${window.location.origin}/${stickerVote}`,
+                    transform: {
+                        rotation: 0,
+                        relation_width: 1,
+                        translation_x: 0,
+                        translation_y: 0,
+                        gravity: 'center',
+                    },
+                    clickable_zones: [
+                        {
+                            action_type: 'link',
+                            action: {
+                                link: `https://vk.com/app${appId}#${duelId}_vote_c`,
+                            },
+                            // eslint-disable-next-line max-len
+                            clickable_area: [{ x: 0, y: 0 }, { x: 1000, y: 0 }, { x: 1000, y: 950 }, { x: 0, y: 950 }],
+                        },
+                        {
+                            action_type: 'link',
+                            action: {
+                                link: `https://vk.com/app${appId}#${duelId}_vote_o`,
+                            },
+                            // eslint-disable-next-line max-len
+                            clickable_area: [{ x: 0, y: 950 }, { x: 1000, y: 950 }, { x: 1000, y: 1900 }, { x: 0, y: 1900 }],
+                        },
+                    ],
+                    original_width: 1000,
+                    original_height: 1900,
+                    can_delete: false,
+                },
+            },
+        ],
+    };
 };
