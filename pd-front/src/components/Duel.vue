@@ -357,6 +357,8 @@ export default {
 
     .user {
         margin-left: 5px;
+        max-width: 32vw;
+        overflow: hidden;
     }
 
     .middle-top {

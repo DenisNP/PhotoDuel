@@ -14,7 +14,7 @@ export default new Vuex.Store({
         user: {},
         currentTab: 1,
         isLoading: false,
-        notifications: false,
+        notifications: true,
         noInternet: false,
     },
     getters,

@@ -7,6 +7,8 @@ const cWidth = 830;
 const cHeight = 142;
 const iSize = 850;
 const ivSize = 750;
+const allWidth = 1150;
+const allHeight = 1900;
 
 const createSoloCanvas = async (imageUrl, challengeElement) => {
     const canvas = document.getElementById('canvas');
@@ -14,7 +16,7 @@ const createSoloCanvas = async (imageUrl, challengeElement) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     await drawImage(soloBg, 0, 0);
-    await drawImage(imageUrl, (1000 - iSize) / 2, 870 - iSize / 2, iSize, iSize);
+    await drawImage(imageUrl, (allWidth - iSize) / 2, 870 - iSize / 2, iSize, iSize);
 
     const challenge = await html2canvas(
         challengeElement,
@@ -25,7 +27,7 @@ const createSoloCanvas = async (imageUrl, challengeElement) => {
         },
     );
 
-    ctx.drawImage(challenge, (1000 - cWidth) / 2, 266 - cHeight / 2);
+    ctx.drawImage(challenge, (allWidth - cWidth) / 2, 266 - cHeight / 2);
     return canvas.toDataURL('image/jpeg');
 };
 
@@ -45,7 +47,7 @@ export const createSoloStory = async (imageUrl, challengeElement, duelId) => {
                         rotation: 0,
                         relation_width: 0.68,
                         translation_x: 0,
-                        translation_y: 0.2,
+                        translation_y: 0.5,
                         gravity: 'center',
                     },
                     clickable_zones: [
@@ -55,11 +57,11 @@ export const createSoloStory = async (imageUrl, challengeElement, duelId) => {
                                 link: `https://vk.com/app${getAppId()}#${duelId}`,
                             },
                             // eslint-disable-next-line max-len
-                            clickable_area: [{ x: 13, y: 134 }, { x: 664, y: 134 }, { x: 664, y: 260 }, { x: 13, y: 260 }],
+                            clickable_area: [{ x: 0, y: 100 }, { x: 679, y: 100 }, { x: 679, y: 269 }, { x: 0, y: 269 }],
                         },
                     ],
-                    original_width: 1000,
-                    original_height: 1900,
+                    original_width: allWidth,
+                    original_height: allHeight,
                     can_delete: true,
                 },
             },
@@ -73,8 +75,8 @@ const createVoteCanvas = async (firstImgUrl, secondImgUrl, challengeElement) => 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     await drawImage(voteBg, 0, 0);
-    await drawImage(firstImgUrl, (1000 - ivSize) / 2, 430 - ivSize / 2, ivSize, ivSize);
-    await drawImage(secondImgUrl, (1000 - ivSize) / 2, 1470 - ivSize / 2, ivSize, ivSize);
+    await drawImage(firstImgUrl, (allWidth - ivSize) / 2, 430 - ivSize / 2, ivSize, ivSize);
+    await drawImage(secondImgUrl, (allWidth - ivSize) / 2, 1470 - ivSize / 2, ivSize, ivSize);
 
     const challenge = await html2canvas(
         challengeElement,
@@ -85,7 +87,7 @@ const createVoteCanvas = async (firstImgUrl, secondImgUrl, challengeElement) => 
         },
     );
 
-    ctx.drawImage(challenge, (1000 - cWidth) / 2, 970 - cHeight / 2);
+    ctx.drawImage(challenge, (allWidth - cWidth) / 2, 970 - cHeight / 2);
     return canvas.toDataURL('image/jpeg');
 };
 
@@ -101,7 +103,7 @@ export const createVoteStory = async (firstImgUrl, secondImgUrl, challengeElemen
                 sticker_type: 'renderable',
                 sticker: {
                     content_type: 'image',
-                    blob: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA+gAAAdsBAMAAADO47sKAAAAGFBMVEVHcEzu7u7u7u7u7u7u7u7u7u7u7u7u7u5dACs3AAAAB3RSTlMAs0aYCtMHX5tpiAAACkhJREFUeNrt1KENwlAUhtG2eanG4ZimIzAAgh0Yg30wnQBGIF2gwaCeKFiuJEGQ23Pctf+X99pT86meG/LZHsLZWWR9RBcd0REd0REd0REd0REd0REd0REd0REd0RFddERHdERHdERHdERHdERHdERHdERHdERHdNERHdERHdERHdERHdERHdERHdERHdERHdFFR3RER3RER3RER3RER3RER3RER3RER3REFx3RER3RER3RER3RER3RER3RER3RER3RER3RRUd0REd0REd0REd0REd0REd0REd0REd0RBcd0REd0REd0REd0REd0REd0REd0REd0RFddERHdERHdERHdERHdERHdERHdERHdERHdNERHdERHdERHdERHdERHdERHdERHdERHdFFR3RER3RER3RER3RER3RER3RER3RER3RER3TRER3RER3RER3RER3RER3RER3RER3RER3RRUd0REd0REd0REd0REd0REd0REd0REd0RBcd0REd0REd0REd0REd0REd0REd0REd0RFddERHdERHdERHdERHdERHdERHdERHdERHdNERHdERHdERHdERHdERHdERHdERHdERHdERXXRER3RER3RER3RER3RER3RER3RER3RER3TRER3RER3RER3RER3RER3RER3RER3RER3RRUd0REd0REd0REd0REd0REd0REd0REd0RBcd0REd0REd0REd0REd0REd0REd0REd0RFddERHdERHdERHdERHdERHdERHdERHdERHdEQXHdERHdERHdERHdERHdERHdERHdERHdERXXRER3RER3RER3RER3RER3RER3RER3RER3TRER3RER3RER3RER3RER3RER3RER3RER3RRUd0REd0REd0REd0REd0REd0REd0REd0RBcd0REd0REd0REd0REd0REd0REd0REd0REd0UVHdERHdERHdERHdERHdERHdERHdERHdEQXHdERHdERHdERHdERHdERHdERHdERHdERXXRER3RER3RER3RER3RER3RER3RER3RER3TRER3RER3RER3RER3RER3RER3RER3RER3RRUd0REd0REd0REd0REd0REd0REd0REd0REd00REd0REd0REd0REd0REd0REd0REd0REd0UVHdERHdERHdERHdERHdERHdERHdERHdEQXHdERHdERHdERHdERHdERHdERHdERHdERXXRER3RER3RER3RER3RER3RER3RER3RER3TRER3RER3RER3RER3RER3RER3RER3RER3REV10REd0REd0REd0REd0REd0REd0REd0REd00REd0REd0REd0REd0REd0REd0REd0REd0UVHdERHdERHdERHdERHdERHdERHdERHdEQXHdERHdERHdERHdERHdERHdERHdERHdERXXRER3RER3RER3RER3RER3RER3RER3RER3REFx3RER3RER3RER3RER3RER3RER3RER3REV10REd0REd0REd0REd0REd0REd0REd0REd00REd0REd0REd0REd0REd0REd0REd0REd0UVHdERHdERHdERHdERHdERHdERHdERHdEQXHdERHdERHdERHdERHdERHdERHdERHdERHdFFR3RER3RER3RER3RER3RER3RER3RER3REFx3RER3RER3RER3RER3REZ2fK/dwLhbJaBcrl6tJ8ptnGwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/6UdwtldTJLQcQpneYTzZaCE+nETo8eXXm8myqc+9/E/N8n6iC46oiM6oiM6oiM6oiM6oiM6oiM6oiM6oiO66IiO6IiO6IiO6IiO6IiO6IiO6IiO6IiO6KIjOqIjOqIjOqIjOqIjOqIjOqIjOqIjOqKLjuiIjuiIjuiIjuiIjuiIjuiIjuiIjuiILjqiIzqiIzqiIzqiIzqiIzqiIzqiIzqiIzqii47oiI7oiI7oiI7oiI7oiI7oiI7oiI7oiC46oiM6oiM6oiM6oiM6oiM6oiM6oiM6oiO66IiO6IiO6IiO6IiO6IiO6IiO6IiO6IiO6KIjOqIjOqIjOqIjOqIjOqIjOqIjOqIjOqKLjuiIjuiIjuiIjuiIjuiIjuiIjuiIjuiIjuiiIzqiIzqiIzqiIzqiIzqiIzqiIzqiIzqii47oiI7oiI7oiI7oiI7oiI7oiI7oiI7oiC46oiM6oiM6oiM6oiM6oiM6oiM6oiM6oiO66IiO6IiO6IiO6IiO6IiO6IiO6IiO6IiO6KIjOqIjOqIjOqIjOqIjOqIjOqIjOqIjOqIjuuiIjuiIjuiIjuiIjuiIjuiIjuiIjuiIjuiiIzqiIzqiIzqiIzqiIzqiIzqiIzqiIzqii47oiI7oiI7oiI7oiI7oiI7oiI7oiI7oiC46oiM6oiM6oiM6oiM6oiM6oiM6oiM6oiO66IiO6IiO6IiO6IiO6IiO6IiO6IiO6IiO6IguOqIjOqIjOqIjOqIjOqIjOqIjOqIjOqIjuuiIjuiIjuiIjuiIjuiIjuiIjuiIjuiIjuiiIzqiIzqiIzqiIzqiIzqiIzqiIzqiIzqii47oiI7oiI7oiI7oiI7oiI7oiI7oiI7oiC46oiM6oiM6oiM6oiM6oiM6oiM6oiM6oiM6oouO6IiO6IiO6IiO6IiO6IiO6IiO6IiO6IguOqIjOqIjOqIjOqIjOqIjOqIjOqIjOqIjuuiIjuiIjuiIjuiIjuiIjuiIjuiIjuiIjuiiIzqiIzqiIzqiIzqiIzqiIzqiIzqiIzqii47oiI7oiI7oiI7oiI7oiI7oiI7oiI7oiI7ooiM6oiM6oiM6oiM6oiM6oiM6oiM6oiM6oouO6IiO6IiO6IiO6IiO6IiO6IiO6IiO6IguOqIjOqIjOqIjOqIjOqIjOqIjOqIjOqIjuuiIjuiIjuiIjuiIjuiIjuiIjuiIjuiIjuiiIzqiIzqiIzqiIzqiIzqiIzqiIzqiIzqiI7roiI7oiI7oiI7oiI7oiI7oiI7oiI7oiI7ooiM6oiM6oiM6oiM6oiM6oiM6oiM6oiM6oouO6IiO6IiO6IiO6IiO6IiO6IiO6IiO6IguOqIjOqIjOqIjOqIjOqIjOqIjOqIjOqIjuuiIjuiIjuiIjuiIjuiIjuiIjuiIjuiIjuiILjqiIzqiIzqiIzqiIzqiIzqiIzqiIzqiI7roiI7oiI7oiI7oiI7oiI7oiI7oiI7oiI7ooiM6oiM6oiM6oiM6oiM6oiM6oiM6oiM6oouO6IiO6IiO6IiO6IiO6IiO6IiO6IiO6IguOqIjOqIjOqIjOqIjOqIjOqIjOqIjOqIjOqKLjuiIjuiIjuiIjuiIjuiIjuiIzrfe/8Md0HLnA1UAAAAASUVORK5CYII=',
+                    blob: 'data:image/png;base64,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',
                     transform: {
                         rotation: 0,
                         relation_width: 1,
@@ -116,7 +118,7 @@ export const createVoteStory = async (firstImgUrl, secondImgUrl, challengeElemen
                                 link: `https://vk.com/app${appId}#${duelId}_vote_c`,
                             },
                             // eslint-disable-next-line max-len
-                            clickable_area: [{ x: 0, y: 0 }, { x: 1000, y: 0 }, { x: 1000, y: 950 }, { x: 0, y: 950 }],
+                            clickable_area: [{ x: 0, y: 0 }, { x: allWidth, y: 0 }, { x: allWidth, y: allHeight / 2 }, { x: 0, y: allHeight / 2 }],
                         },
                         {
                             action_type: 'link',
@@ -124,11 +126,11 @@ export const createVoteStory = async (firstImgUrl, secondImgUrl, challengeElemen
                                 link: `https://vk.com/app${appId}#${duelId}_vote_o`,
                             },
                             // eslint-disable-next-line max-len
-                            clickable_area: [{ x: 0, y: 950 }, { x: 1000, y: 950 }, { x: 1000, y: 1900 }, { x: 0, y: 1900 }],
+                            clickable_area: [{ x: 0, y: allHeight / 2 }, { x: allWidth, y: allHeight / 2 }, { x: allWidth, y: allHeight }, { x: 0, y: allHeight }],
                         },
                     ],
-                    original_width: 1000,
-                    original_height: 1900,
+                    original_width: allWidth,
+                    original_height: allHeight,
                     can_delete: false,
                 },
             },
