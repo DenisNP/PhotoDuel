@@ -11,7 +11,7 @@
         <f7-button icon-material="report" color="gray" class="report-btn" @click="report"/>
         <div class="photo-block">
             <div class="duellist">
-                <div class="photo" @click.native="showPhotos(false)">
+                <div class="photo" @click="showPhotos(false)">
                     <f7-icon material="check_circle" class="voted-icon" v-if="voteCreator"/>
                     <img :src="duel.creator.image"/>
                 </div>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="duellist">
-                <div class="photo" @click.native="showPhotos(true)">
+                <div class="photo" @click="showPhotos(true)">
                     <f7-icon material="check_circle" class="voted-icon" v-if="voteOpponent"/>
                     <img v-if="duel.opponent" :src="duel.opponent.image"/>
                 </div>
