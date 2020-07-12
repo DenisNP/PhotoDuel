@@ -149,6 +149,6 @@ export default {
 
     saveOnboarding({ commit }) {
         commit('setShowOnboarding', false);
-        VKC.send('VKWebAppStorageSet', { key: 'onboarded', value: 1 });
+        VKC.send('VKWebAppStorageSet', { key: 'onboarded', value: '1' });
     },
 };
