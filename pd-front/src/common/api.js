@@ -1,7 +1,7 @@
-import { getSearch, getUserId, isDev } from './utils';
+import { getSearch, getUserId } from './utils';
 
 export default async (method, data) => {
-    const apiAddress = isDev() ? 'http://localhost:5000' : '';
+    const apiAddress = 'https://photoduel.justanother.app'; // isDev() ? 'http://localhost:5000' :
     const search = getSearch();
     const params = {};
     search.forEach((value, key) => {
