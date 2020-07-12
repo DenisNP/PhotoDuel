@@ -70,8 +70,12 @@ namespace PhotoDuel.Services
                 "&",
                 pars.Select(kv => $"{kv.Key}={HttpUtility.UrlEncode(kv.Value)}").OrderBy(x => x)
             );
+            Console.WriteLine(parsString);
 
             var calculatedSign = Utils.ToBase64(Utils.HashHMAC(_vkApiSecret, parsString));
+            Console.WriteLine(calculatedSign);
+            Console.WriteLine(sign);
+            Console.WriteLine(calculatedSign == sign);
             return calculatedSign == sign && pars.ContainsKey("vk_user_id") && pars["vk_user_id"] == userId;
         }
 
