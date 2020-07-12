@@ -23,6 +23,9 @@ export default {
     setNoInternet(state, noInternet) {
         state.noInternet = noInternet;
     },
+    setShowOnboarding(state, showOnboarding) {
+        state.showOnboarding = showOnboarding;
+    },
     setNewMyDuel(state, duel) {
         const myDuel = state.myDuels.find((d) => d.id === duel.id);
         if (myDuel) {

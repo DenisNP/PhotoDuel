@@ -38,7 +38,7 @@ namespace PhotoDuel.Services
             {
                 // check current public challenge
                 var duel = _dbService.ById<Duel>(user.PublicDuel.Id);
-                if (duel != null && duel.Status != DuelStatus.Created)
+                if (duel == null || duel.Status != DuelStatus.Created)
                 {
                     user.PublicDuel = null;
                     _dbService.UpdateAsync(user);

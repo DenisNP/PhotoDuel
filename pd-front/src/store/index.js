@@ -16,6 +16,7 @@ export default new Vuex.Store({
         isLoading: false,
         notifications: true,
         noInternet: false,
+        showOnboarding: false,
     },
     getters,
     mutations,

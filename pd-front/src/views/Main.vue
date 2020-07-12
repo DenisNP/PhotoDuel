@@ -1,5 +1,5 @@
 <template>
-    <f7-page>
+    <f7-page style="position: relative;">
         <f7-navbar :title="title"/>
         <f7-toolbar tabbar labels position="bottom">
 <!--            <f7-link-->
@@ -35,7 +35,11 @@
             >
                 <tab-challenge @reload="load"/>
             </f7-tab>
-            <f7-tab v-show="currentTab === 2" :tab-active="currentTab === 2" class="full-height">
+            <f7-tab
+                v-show="currentTab === 2"
+                :tab-active="currentTab === 2"
+                class="full-height"
+            >
                 <tab-duels/>
             </f7-tab>
         </f7-tabs>
@@ -113,4 +117,7 @@ export default {
     .graybg {
         background-color: #eee;
     }
+</style>
+
+<style scoped>
 </style>

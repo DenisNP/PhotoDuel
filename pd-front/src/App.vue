@@ -1,5 +1,59 @@
 <template>
     <f7-app :params="f7params">
+        <transition name="popup">
+            <div class="onboarding" v-if="$store.state.showOnboarding">
+                <f7-swiper pagination>
+                    <f7-swiper-slide>
+                        <div class="onboarding-slide">
+                            <div class="ob-pic">
+                                <img src="./assets/ondoarding_0.jpg">
+                            </div>
+                            <div class="ob-text">
+                                Каждый день вы будете получать на выбор несколько <b>заданий</b> на
+                                фотографирование.
+                                <span class="ob-small">
+                                    Там будут приключения, абстрактное искусство,
+                                    челленджи и много всего ещё.
+                                </span>
+                            </div>
+                            <f7-button fill @click="slideNext">Далее</f7-button>
+                        </div>
+                    </f7-swiper-slide>
+                    <f7-swiper-slide>
+                        <div class="onboarding-slide">
+                            <div class="ob-pic">
+                                <img src="./assets/ondoarding_1.jpg">
+                            </div>
+                            <div class="ob-text">
+                                Сделав фото по заданию, вы сможете <b>вызвать на дуэль</b>
+                                кого-нибудь.
+                                <span class="ob-small">
+                                    Есть вызовы для друзей или соревнование
+                                    со случайным незнакомцем.
+                                </span>
+                            </div>
+                            <f7-button fill @click="slideNext">Далее</f7-button>
+                        </div>
+                    </f7-swiper-slide>
+                    <f7-swiper-slide>
+                        <div class="onboarding-slide">
+                            <div class="ob-pic">
+                                <img src="./assets/ondoarding_2.jpg">
+                            </div>
+                            <div class="ob-text">
+                                Когда вызов примут, вы публикуете
+                                <b>голосование</b> в Историях.
+                                <span class="ob-small">
+                                    Выбирать победителя смогут все ваши
+                                    друзья, даже те, кого нет в приложении!
+                                </span>
+                            </div>
+                            <f7-button fill @click="start">Хорошо!</f7-button>
+                        </div>
+                    </f7-swiper-slide>
+                </f7-swiper>
+            </div>
+        </transition>
         <f7-view :push-state="true" main url="/"/>
     </f7-app>
 </template>
@@ -36,6 +90,15 @@ export default {
         },
         noInternet() {
             return this.$store.state.noInternet;
+        },
+    },
+    methods: {
+        slideNext() {
+            const sw = this.$f7.swiper.get();
+            if (sw) sw.slideNext();
+        },
+        start() {
+            this.$store.dispatch('saveOnboarding');
         },
     },
     watch: {
@@ -149,5 +212,61 @@ export default {
 
     .my-text-center {
         text-align: center;
+    }
+
+    .onboarding {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.2);
+        z-index: 5001;
+    }
+
+    .onboarding-slide {
+        width: calc(100vw - 80px);
+        height: calc(100vh - 120px);
+        margin-top: 20px;
+        margin-left: 20px;
+        background: white;
+        border-radius: 15px;
+        padding: 40px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .popup-enter-active, .popup-leave-active {
+        transition: all .3s;
+    }
+
+    .popup-enter, .popup-leave-to {
+        transform: scale(0.1);
+        opacity: 0;
+    }
+
+    .ob-text {
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .ob-small {
+        font-size: 14px;
+        margin-top: 15px;
+        display: block;
+    }
+
+    .ob-pic {
+        width: calc(100vw - 100px);
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 10px;
+        overflow: hidden;
+        line-height: 0;
+    }
+
+    .ob-pic > img {
+        width: 100%;
     }
 </style>

@@ -57,6 +57,14 @@ export default {
                     dispatch('init', false);
                 }
             });
+
+            // onboarded
+            const [onb] = await VKC.send('VKWebAppStorageGet', { keys: ['onboarded'] });
+            if (onb && onb.keys) {
+                if (!onb.keys.some((k) => k.key === 'onboarded' && k.value)) {
+                    commit('setShowOnboarding', true);
+                }
+            }
         }
 
         const result = await dispatch('api', { method: 'init', data });
@@ -137,5 +145,10 @@ export default {
             return true;
         }
         return false;
+    },
+
+    saveOnboarding({ commit }) {
+        commit('setShowOnboarding', false);
+        VKC.send('VKWebAppStorageSet', { key: 'onboarded', value: 1 });
     },
 };
