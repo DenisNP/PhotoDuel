@@ -47,7 +47,7 @@ export const createSoloStory = async (imageUrl, challengeElement, duelId) => {
                         rotation: 0,
                         relation_width: 0.68,
                         translation_x: 0,
-                        translation_y: 0.7,
+                        translation_y: 0.2,
                         gravity: 'center',
                     },
                     clickable_zones: [
@@ -93,8 +93,9 @@ const createVoteCanvas = async (firstImgUrl, secondImgUrl, challengeElement) => 
 
 export const createVoteStory = async (firstImgUrl, secondImgUrl, challengeElement, duelId) => {
     const dataUrl = await createVoteCanvas(firstImgUrl, secondImgUrl, challengeElement);
+    console.log(dataUrl);
     const appId = getAppId();
-    return {
+    const data = {
         background_type: 'image',
         blob: dataUrl,
         locked: true,
@@ -136,4 +137,6 @@ export const createVoteStory = async (firstImgUrl, secondImgUrl, challengeElemen
             },
         ],
     };
+    console.log(data);
+    return data;
 };
