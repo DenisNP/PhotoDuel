@@ -62,7 +62,9 @@ namespace PhotoDuel
             var response = client.PostAsync(url, formContent).Result;
             var bytes = response.Content.ReadAsByteArrayAsync().Result;
 
-            return Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+            var stringResponse = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+            Console.WriteLine(stringResponse);
+            return stringResponse;
         }
         
         public static byte[] HashHMAC(string key, string message)
@@ -75,7 +77,9 @@ namespace PhotoDuel
         
         public static string ToBase64(byte[] hash)
         {
-            return Convert.ToBase64String(hash)
+            var base64 = Convert.ToBase64String(hash);
+            Console.WriteLine(base64);
+            return base64
                 .TrimEnd(new []{'='})
                 .Replace('+', '-')
                 .Replace('/', '_');
