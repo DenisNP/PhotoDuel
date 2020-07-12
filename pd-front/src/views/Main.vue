@@ -2,13 +2,13 @@
     <f7-page>
         <f7-navbar :title="title"/>
         <f7-toolbar tabbar labels position="bottom">
-            <f7-link
-                tab-link="#tab-pantheon"
-                :tab-link-active="currentTab === 0"
-                text="Пантеон"
-                icon-material="leaderboard"
-                @click="$store.commit('setTab', 0)"
-            />
+<!--            <f7-link-->
+<!--                tab-link="#tab-pantheon"-->
+<!--                :tab-link-active="currentTab === 0"-->
+<!--                text="Пантеон"-->
+<!--                icon-material="leaderboard"-->
+<!--                @click="$store.commit('setTab', 0)"-->
+<!--            />TODO-->
             <f7-link
                 tab-link="#tab-challenge"
                 :tab-link-active="currentTab === 1"

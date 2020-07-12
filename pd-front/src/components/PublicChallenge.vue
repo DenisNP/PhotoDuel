@@ -19,7 +19,7 @@ export default {
     name: 'PublicChallenge',
     computed: {
         categoryName() {
-            return this.$store.getters.challengeById(this.duel.challengeId).category;
+            return this.$store.getters.challengeById(this.duel.challengeId).category.toLowerCase();
         },
     },
     props: {
@@ -48,7 +48,7 @@ export default {
 
     .category {
         position: absolute;
-        top: 1px;
+        bottom: 1px;
         right: 4px;
         color: #aaa;
         font-size: 12px;

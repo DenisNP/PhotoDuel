@@ -1,3 +1,13 @@
+const emptyChallenge = (id) => ({
+    id,
+    name: '...',
+    description: '...',
+    icon: 'crop_square',
+    category: ' ',
+    color: '#000000',
+    categoryId: -1,
+});
+
 export default {
     challengeById(state) {
         const challenges = {};
@@ -11,7 +21,7 @@ export default {
                 };
             });
         });
-        return (id) => challenges[id];
+        return (id) => challenges[id] || emptyChallenge(id);
     },
 
     currentDuels(state) {

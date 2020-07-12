@@ -1,6 +1,6 @@
 <template>
     <div class="challenge">
-        <div class="category">{{challenge.category}}</div>
+        <div class="category">{{challenge.category.toLowerCase()}}</div>
         <div class="icon">
             <f7-icon
                 class="icon-inner"
@@ -27,7 +27,7 @@ export default {
             return this.$store.getters.challengeById(this.challengeId);
         },
         isLongDescription() {
-            return this.challenge.description.length > 60;
+            return this.challenge && this.challenge.description.length > 60;
         },
     },
     props: {
@@ -73,7 +73,7 @@ export default {
 
     .category {
         position: absolute;
-        top: 1px;
+        bottom: 1px;
         right: 4px;
         color: #aaa;
         font-size: 12px;

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using PhotoDuel.Models;
 using PhotoDuel.Models.Web.Request;
 using PhotoDuel.Models.Web.Response;
 using PhotoDuel.Services;
@@ -55,7 +56,7 @@ namespace PhotoDuel.Controllers
                 var user = _userService.LoadUser(req.UserId);
                 user = _userService.CheckShuffles(user);
                 var myDuels = _userService.LoadMyDuels(req.UserId);
-                var winners = _userService.LoadPantheon().ToArray();
+                var winners = new Winner[0]; // TODO _userService.LoadPantheon().ToArray();
 
                 // check if voting or load duel by link
                 var additionalDuel = _duelService.LoadAdditional(req.UserId, req.Vote, req.DuelId, myDuels, out var message);

@@ -47,7 +47,7 @@ export const createSoloStory = async (imageUrl, challengeElement, duelId) => {
                         rotation: 0,
                         relation_width: 0.68,
                         translation_x: 0,
-                        translation_y: 0.22,
+                        translation_y: 0.3,
                         gravity: 'center',
                     },
                     clickable_zones: [
