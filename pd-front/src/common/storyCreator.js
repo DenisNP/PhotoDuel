@@ -75,8 +75,8 @@ const createVoteCanvas = async (firstImgUrl, secondImgUrl, challengeElement) => 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     await drawImage(voteBg, 0, 0);
-    await drawImage(firstImgUrl, (allWidth - ivSize) / 2, 430 - ivSize / 2, ivSize, ivSize);
-    await drawImage(secondImgUrl, (allWidth - ivSize) / 2, 1470 - ivSize / 2, ivSize, ivSize);
+    await drawImage(firstImgUrl, (allWidth - ivSize) / 2, 450 - ivSize / 2, ivSize, ivSize);
+    await drawImage(secondImgUrl, (allWidth - ivSize) / 2, 1450 - ivSize / 2, ivSize, ivSize);
 
     const challenge = await html2canvas(
         challengeElement,
