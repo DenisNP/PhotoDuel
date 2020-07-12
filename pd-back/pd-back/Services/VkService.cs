@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using PhotoDuel.Models;
 using PhotoDuel.Models.Vk;
@@ -10,13 +11,15 @@ namespace PhotoDuel.Services
 {
     public class VkService : ISocialService
     {
+        private readonly ILogger<VkService> _logger;
         private const string VkApiAddress = "https://api.vk.com";
         private const string VkApiVersion = "5.120";
         private readonly string _vkApiKey;
         private readonly string _vkApiSecret;
 
-        public VkService()
+        public VkService(ILogger<VkService> logger)
         {
+            _logger = logger;
             var key = Environment.GetEnvironmentVariable("PHOTO_DUEL_VK_TOKEN");
             _vkApiKey = key ?? throw new ArgumentException("No VK Service token!");
 
@@ -76,7 +79,7 @@ namespace PhotoDuel.Services
         private string MakeVkRequest(string method, Dictionary<string, string> data)
         {
             var address = $"{VkApiAddress}/method/{method}?v={VkApiVersion}&access_token={_vkApiKey}";
-            return Utils.MakeRequest(address, data);
+            return Utils.MakeRequest(address, data, _logger);
         }
     }
 }

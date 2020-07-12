@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -49,7 +50,7 @@ namespace PhotoDuel
             return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
         
-        public static string MakeRequest(string url, Dictionary<string, string> data)
+        public static string MakeRequest(string url, Dictionary<string, string> data, ILogger logger = null)
         {
             var kvList = new List<KeyValuePair<string, string>>();
             foreach (var (key, value) in data)
@@ -63,7 +64,7 @@ namespace PhotoDuel
             var bytes = response.Content.ReadAsByteArrayAsync().Result;
 
             var stringResponse = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-            Console.WriteLine(stringResponse);
+            logger?.LogInformation(stringResponse);
             return stringResponse;
         }
         
