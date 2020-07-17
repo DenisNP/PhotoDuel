@@ -39,7 +39,7 @@
             >
                 Перемешать
             </f7-button>
-            <div v-else class="non-shuffle-text">Новые задания будут завтра</div>
+            <div v-else class="non-shuffle-text">У вас на сегодня закончились перемешивания</div>
             <div class="empty"/>
         </div>
         <div v-else>

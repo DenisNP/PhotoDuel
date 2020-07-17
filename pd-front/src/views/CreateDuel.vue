@@ -32,7 +32,7 @@
                 <input
                     @change="photoSelected"
                     type="file"
-                    accept="image/*"
+                    accept=".jpg,.jpeg,.png"
                     style="display:none;"
                 />
             </label>
@@ -93,6 +93,20 @@ export default {
         photoSelected(e) {
             const files = e.target.files || e.dataTransfer.files;
             if (!files.length) return;
+            const file = files[0];
+
+            // check file extension
+            const idxDot = file.name.lastIndexOf('.') + 1;
+            const extFile = file.name.substr(idxDot, file.name.length).toLowerCase();
+            if (extFile !== 'jpg' && extFile !== 'jpeg' && extFile !== 'png') {
+                this.$f7.toast.create({
+                    text: 'Неверный тип файла',
+                    position: 'center',
+                    cssClass: 'my-text-center',
+                    closeTimeout: 2000,
+                }).open();
+                return;
+            }
 
             const reader = new FileReader();
             reader.onload = (fr) => {
@@ -102,7 +116,7 @@ export default {
                 this.imageSelected = true;
             };
 
-            reader.readAsDataURL(files[0]);
+            reader.readAsDataURL(file);
         },
         async createDuel() {
             this.$store.commit('setLoading', true);
