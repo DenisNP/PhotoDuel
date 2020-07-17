@@ -96,6 +96,7 @@ namespace PhotoDuel.Services
             if (photoId.Length > 300) throw new ArgumentException("PhotoId is too long");
             if (!_socialService.CheckImageUrl(image)) throw new ArgumentException("Image url is invalid");
             if (!_contentService.HasChallengeId(challengeId)) throw new ArgumentException("Wrong challengeId");
+            if (!user.ChallengeIds.Contains(challengeId)) throw new ArgumentException("This challengeId was not assigned to this user");
             
             // create new duel object
             var duel = new Duel
