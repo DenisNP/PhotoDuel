@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="duels.length === 0" class="empty-duels">
-            <div>Здесь будут отображаться все дуэли, в которых вы приняли участие</div>
+            <div>Здесь будут отображаться все дуэли, в которых вы приняли участие.</div>
             <f7-button class="call-btn" @click="$store.commit('setTab', 1)">
                 Вызвать на дуэль
             </f7-button>

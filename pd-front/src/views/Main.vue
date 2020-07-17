@@ -30,7 +30,6 @@
 <!--            </f7-tab>-->
             <f7-tab
                 v-show="currentTab === 1"
-                class="full-height"
                 :tab-active="currentTab === 1"
             >
                 <tab-challenge @reload="load"/>
@@ -38,7 +37,6 @@
             <f7-tab
                 v-show="currentTab === 2"
                 :tab-active="currentTab === 2"
-                class="full-height"
             >
                 <tab-duels/>
             </f7-tab>

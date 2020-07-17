@@ -53,7 +53,7 @@
                 external
                 large
                 icon-material="clear"
-                class="my-icon margin-top-btn"
+                class="my-icon margin-top-btn-small"
                 @click="$f7.views.main.router.back()"
             >
                 Отмена
@@ -203,5 +203,9 @@ export default {
 
     .margin-top-btn {
         margin-top: 10px;
+    }
+
+    .margin-top-btn-small {
+        margin-top: 5px;
     }
 </style>

@@ -131,7 +131,7 @@ export default {
             if (this.duel.status === 'Finished') return 'Завершено';
             if (this.duel.status === 'Created') {
                 if (this.duel.isPublic) return 'Публичная: ожидание';
-                return 'Отправьте вызов';
+                return this.isMine ? 'Отправьте вызов' : 'Примите вызов';
             }
 
             const hours = Math.floor(this.timeLeft / 3600);

@@ -54,6 +54,7 @@ export default {
             // reload on restore from cache
             VKC.subscribe((evt) => {
                 if (evt.detail && evt.detail.type === 'VKWebAppViewRestore') {
+                    commit('setLoading', false);
                     dispatch('init', false);
                 }
             });
