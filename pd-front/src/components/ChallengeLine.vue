@@ -29,7 +29,7 @@ export default {
             return this.allChallenges.findIndex((c) => c.id === this.challengeId);
         },
         translate() {
-            return `calc(${34 + 66 * this.challengeIndex}px - ${this.challengeIndex * 100}vw)`;
+            return `calc(-${this.challengeIndex * 100}vw)`;
         },
     },
     props: {
@@ -55,8 +55,8 @@ export default {
     }
 
     .challenge-block {
-        width: calc(100vw - 100px);
-        min-width: calc(100vw - 100px);
+        width: calc(100vw - 34px);
+        min-width: calc(100vw - 34px);
         margin: 0 10px;
     }
 </style>
