@@ -14,23 +14,36 @@ namespace PhotoDuel.Services
         private readonly ILogger<CheckDuelsService> _logger;
         private readonly IDbService _dbService;
         private readonly DuelService _duelService;
+        private readonly ConcurrencyService _concurrencyService;
         private Timer _timer;
 
-        public CheckDuelsService(ILogger<CheckDuelsService> logger, IDbService dbService, DuelService duelService)
+        public CheckDuelsService(
+            ILogger<CheckDuelsService> logger,
+            IDbService dbService,
+            DuelService duelService,
+            ConcurrencyService concurrencyService
+        )
         {
             _logger = logger;
             _dbService = dbService;
             _duelService = duelService;
+            _concurrencyService = concurrencyService;
         }
         
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(CheckDuels, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            _timer = new Timer(ToBackgroundJob, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
             _logger.LogInformation("Background check started");
             return Task.CompletedTask;
         }
+
+        private void ToBackgroundJob(object state = null)
+        {
+            CheckDuels();
+            _concurrencyService.CleanOld();
+        }
         
-        private void CheckDuels(object state = null)
+        private void CheckDuels()
         {
             var now = Utils.Now();
             var duels = _dbService.Collection<Duel>()

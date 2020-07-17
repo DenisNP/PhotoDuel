@@ -93,7 +93,8 @@ namespace PhotoDuel.Services
             var currentDuel = _dbService.Collection<Duel>().FirstOrDefault(Duel.IsCurrentDuelOf(userId));
             
             if (currentDuel != null && !currentDuel.IsPublic) throw new InvalidOperationException("There is current duel already");
-            if (image.Length > 300 || photoId.Length > 300) throw new ArgumentException("Image url is too long");
+            if (photoId.Length > 300) throw new ArgumentException("PhotoId is too long");
+            if (!_socialService.CheckImageUrl(image)) throw new ArgumentException("Image url is invalid");
             if (!_contentService.HasChallengeId(challengeId)) throw new ArgumentException("Wrong challengeId");
             
             // create new duel object
@@ -117,7 +118,7 @@ namespace PhotoDuel.Services
             };
             
             // write to database
-            _dbService.UpdateAsync(duel);
+            _dbService.Update(duel);
 
             // return
             return duel;
@@ -136,7 +137,8 @@ namespace PhotoDuel.Services
             }
             
             // check image
-            if (image.Length > 300 || photoId.Length > 300) throw new ArgumentException("Image url is too long");
+            if (photoId.Length > 300) throw new ArgumentException("PhotoId is too long");
+            if (!_socialService.CheckImageUrl(image)) throw new ArgumentException("Image url is invalid");
             // check if own
             if (duel.Creator.User.Id == userId) throw new InvalidOperationException("This is your own duel");
             
@@ -164,7 +166,7 @@ namespace PhotoDuel.Services
             );
             
             // write to db
-            _dbService.UpdateAsync(duel);
+            _dbService.Update(duel);
 
             // return
             return duel;

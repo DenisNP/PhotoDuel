@@ -21,6 +21,7 @@ namespace PhotoDuel.Controllers
         private readonly DuelService _duelService;
         private readonly ContentService _contentService;
         private readonly ISocialService _socialService;
+        private readonly ConcurrencyService _concurrencyService;
         private readonly ILogger<MainController> _logger;
 
         public MainController(
@@ -28,6 +29,7 @@ namespace PhotoDuel.Controllers
             DuelService duelService,
             ContentService contentService,
             ISocialService socialService,
+            ConcurrencyService concurrencyService,
             ILogger<MainController> logger
         )
         {
@@ -35,6 +37,7 @@ namespace PhotoDuel.Controllers
             _duelService = duelService;
             _contentService = contentService;
             _socialService = socialService;
+            _concurrencyService = concurrencyService;
             _logger = logger;
         }
         
@@ -81,8 +84,9 @@ namespace PhotoDuel.Controllers
             return HandleRequest<CreateDuelRequest, DuelResponse>(
                 req => new DuelResponse
                 {
-                    Duel = _duelService.CreateDuel(req.UserId, req.Image, req.PhotoId, req.ChallengeId)
-                }
+                    Duel = _duelService.CreateDuel(req.UserId, req.Image.Trim(), req.PhotoId, req.ChallengeId)
+                },
+                true
             );
         }
 
@@ -93,7 +97,8 @@ namespace PhotoDuel.Controllers
                 req => new DuelResponse
                 {
                     Duel = _duelService.MakePublic(req.UserId, req.DuelId)
-                }
+                },
+                true
             );
         }
 
@@ -114,8 +119,9 @@ namespace PhotoDuel.Controllers
             return HandleRequest<JoinDuelRequest, DuelResponse>(
                 req => new DuelResponse
                 {
-                    Duel = _duelService.JoinDuel(req.UserId, req.DuelId, req.Image, req.PhotoId)
-                }
+                    Duel = _duelService.JoinDuel(req.UserId, req.DuelId, req.Image.Trim(), req.PhotoId)
+                },
+                true
             );
         }
         
@@ -137,7 +143,8 @@ namespace PhotoDuel.Controllers
                 req => new OkResponse
                 {
                     Ok = _duelService.ReportDuel(req.UserId, req.DuelId)
-                }
+                },
+                true
             );
         }
         
@@ -152,7 +159,7 @@ namespace PhotoDuel.Controllers
             );
         }
         
-        private Task HandleRequest<TRequest, TResponse>(Func<TRequest, TResponse> handler) where TRequest : BaseRequest
+        private Task HandleRequest<TRequest, TResponse>(Func<TRequest, TResponse> handler, bool limitRatio = false) where TRequest : BaseRequest
         {
             // setup response
             Response.Headers.Add("Content-Type", "application/json; charset=utf-8");
@@ -170,6 +177,17 @@ namespace PhotoDuel.Controllers
                 _logger.LogWarning("Signature calculation failed");
                 Response.StatusCode = 400;
                 return Response.WriteAsync(new ErrorResponse("Signature calculation failed").ToString());
+            }
+            
+            // check requests ratio
+            if (limitRatio)
+            {
+                if (!_concurrencyService.CheckAddRequest(request.UserId))
+                {
+                    _logger.LogWarning("Too many requests");
+                    Response.StatusCode = 400;
+                    return Response.WriteAsync(new ErrorResponse("Too many requests").ToString());
+                }
             }
             
             // handle request

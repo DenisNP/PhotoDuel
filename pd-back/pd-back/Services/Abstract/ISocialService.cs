@@ -10,5 +10,7 @@ namespace PhotoDuel.Services.Abstract
         UserMeta GetUser(string userId);
 
         bool IsSignValid(string userId, Dictionary<string, string> pars, string sign);
+
+        bool CheckImageUrl(string url);
     }
 }

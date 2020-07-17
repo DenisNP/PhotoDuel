@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using PhotoDuel.Models;
@@ -16,6 +17,7 @@ namespace PhotoDuel.Services
         private const string VkApiVersion = "5.120";
         private readonly string _vkApiKey;
         private readonly string _vkApiSecret;
+        private Regex _imageUrlRegex = new Regex(@"^https:\/\/sun\d{1,3}\-\d{1,3}\.userapi\.com\/.{10,100}\.jpg");
 
         public VkService(ILogger<VkService> logger)
         {
@@ -74,6 +76,11 @@ namespace PhotoDuel.Services
 
             var calculatedSign = Utils.ToBase64(Utils.HashHMAC(_vkApiSecret, parsString));
             return calculatedSign == sign && pars.ContainsKey("vk_user_id") && pars["vk_user_id"] == userId;
+        }
+
+        public bool CheckImageUrl(string url)
+        {
+            return _imageUrlRegex.IsMatch(url);
         }
 
         private string MakeVkRequest(string method, Dictionary<string, string> data)
