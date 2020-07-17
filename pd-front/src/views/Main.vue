@@ -1,5 +1,5 @@
 <template>
-    <f7-page style="position: relative;">
+    <f7-page style="position: relative;" :class="{colorful: isMainTab, graybg: !isMainTab}">
         <f7-navbar :title="title"/>
         <f7-toolbar tabbar labels position="bottom">
 <!--            <f7-link-->
@@ -24,7 +24,7 @@
                 @click="setTab(2)"
             />
         </f7-toolbar>
-        <f7-tabs class="full-height" :class="{colorful: isMainTab, graybg: !isMainTab}">
+        <f7-tabs class="full-height">
 <!--            <f7-tab v-show="currentTab === 0" :tab-active="currentTab === 0">-->
 <!--                <tab-pantheon/>-->
 <!--            </f7-tab>-->

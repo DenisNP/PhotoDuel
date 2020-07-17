@@ -53,7 +53,7 @@
                 external
                 large
                 icon-material="clear"
-                class="my-icon"
+                class="my-icon margin-top-btn"
                 @click="$f7.views.main.router.back()"
             >
                 Отмена

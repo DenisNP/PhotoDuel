@@ -194,6 +194,9 @@ export default {
             if (this.duel.opponent) {
                 images.push(this.duel.opponent.image);
                 if (startFromOpponent) startIndex = 1;
+            } else if (startFromOpponent) {
+                this.$f7.dialog.alert('Пригласите в дуэль оппонента, чтобы он загрузил фотографию по заданию.');
+                return;
             }
             VKC.bridge().send('VKWebAppShowImages', { images, start_index: startIndex });
         },
