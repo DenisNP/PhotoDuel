@@ -17,7 +17,7 @@ namespace PhotoDuel.Services
         private const string VkApiVersion = "5.120";
         private readonly string _vkApiKey;
         private readonly string _vkApiSecret;
-        private Regex _imageUrlRegex = new Regex(@"^https:\/\/sun\d{1,3}\-\d{1,3}\.userapi\.com\/.{10,100}\.jpg");
+        private readonly Regex _imageUrlRegex = new Regex(@"^https:\/\/sun\d{1,3}\-\d{1,3}\.userapi\.com\/.{10,100}\.jpg");
 
         public VkService(ILogger<VkService> logger)
         {
