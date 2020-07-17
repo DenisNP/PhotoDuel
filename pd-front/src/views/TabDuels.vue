@@ -38,10 +38,11 @@ export default {
     }
 
     .duels-list {
-        padding: 10px 0 0 0;
+        /*padding: 10px 0 0 0;*/
     }
 
     .duel-block {
-        margin-bottom: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 </style>
