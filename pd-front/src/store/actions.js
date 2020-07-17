@@ -22,7 +22,7 @@ export default {
                 if (hashData[2] === 'c') data.vote = 'Creator';
                 if (hashData[2] === 'o') data.vote = 'Opponent';
             }
-            if (hash.length >= 8) {
+            if (hash.length >= 8 && !hash.startsWith('!')) {
                 [data.duelId] = hashData;
                 commit('setLastDuelHash', data.duelId);
             }
@@ -58,7 +58,7 @@ export default {
             VKC.subscribe((evt) => {
                 if (evt.detail && evt.detail.type === 'VKWebAppViewRestore') {
                     commit('setLoading', false);
-                    dispatch('init', false);
+                    dispatch('init', true);
                 }
             });
 
