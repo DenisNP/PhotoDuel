@@ -22,7 +22,7 @@ export default {
                 if (hashData[2] === 'c') data.vote = 'Creator';
                 if (hashData[2] === 'o') data.vote = 'Opponent';
             }
-            [data.duelId] = hashData;
+            if (hash.length >= 8) [data.duelId] = hashData;
         }
         // notifications
         const notifications = Number.parseInt(getSearch().get('vk_are_notifications_enabled'), 10) !== 0;
@@ -46,7 +46,7 @@ export default {
             // set bar color
             VKC.bridge().send(
                 'VKWebAppSetViewSettings',
-                { status_bar_style: 'dark', action_bar_color: '#EB643A' },
+                { status_bar_style: 'light', action_bar_color: '#EB643A' },
             );
 
             // load

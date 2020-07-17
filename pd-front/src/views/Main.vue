@@ -14,20 +14,20 @@
                 :tab-link-active="currentTab === 1"
                 text="Вызов"
                 icon-material="camera"
-                @click="$store.commit('setTab', 1)"
+                @click="setTab(1)"
             />
             <f7-link
                 tab-link="#tab-duels"
                 :tab-link-active="currentTab === 2"
                 text="Дуэли"
                 icon-material="view_day"
-                @click="$store.commit('setTab', 2)"
+                @click="setTab(2)"
             />
         </f7-toolbar>
         <f7-tabs class="full-height" :class="{colorful: isMainTab, graybg: !isMainTab}">
-            <f7-tab v-show="currentTab === 0" :tab-active="currentTab === 0">
-                <tab-pantheon/>
-            </f7-tab>
+<!--            <f7-tab v-show="currentTab === 0" :tab-active="currentTab === 0">-->
+<!--                <tab-pantheon/>-->
+<!--            </f7-tab>-->
             <f7-tab
                 v-show="currentTab === 1"
                 class="full-height"
@@ -49,7 +49,7 @@
 <script>
 import VKC from '@denisnp/vkui-connect-helper';
 import TabChallenge from './TabChallenge.vue';
-import TabPantheon from './TabPantheon.vue';
+// import TabPantheon from './TabPantheon.vue';
 import TabDuels from './TabDuels.vue';
 
 export default {
@@ -93,14 +93,27 @@ export default {
                 closeTimeout: 2000,
             }).open();
         },
+        setTab(tabIdx) {
+            this.$store.commit('setTab', tabIdx);
+            const tabUrl = tabIdx === 1 ? '' : `t${tabIdx}`;
+            window.history.pushState(tabIdx, null, `#!/${tabUrl}`);
+        },
     },
     components: {
         TabChallenge,
-        TabPantheon,
+        // TabPantheon,
         TabDuels,
     },
     mounted() {
         this.load();
+        window.addEventListener('popstate', (e) => {
+            const idx = Number.parseInt(e.state, 10);
+            if (!Number.isNaN(idx)) {
+                this.$store.commit('setTab', idx);
+            } else if (e.state.view_main && e.state.view_main.url === '/') {
+                this.$store.commit('setTab', 1);
+            }
+        });
     },
 };
 </script>

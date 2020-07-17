@@ -43,7 +43,7 @@ export default {
     .challenge {
         background: white;
         border-radius: 10px;
-        padding: 7px;
+        padding: 7px 7px 9px 7px;
         display: flex;
         align-items: center;
         position: relative;
