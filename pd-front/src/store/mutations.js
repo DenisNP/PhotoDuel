@@ -42,4 +42,7 @@ export default {
             state.myDuels.splice(myDuelIdx, 1);
         }
     },
+    setLastDuelHash(state, duelHash) {
+        state.lastDuelHash = duelHash;
+    },
 };

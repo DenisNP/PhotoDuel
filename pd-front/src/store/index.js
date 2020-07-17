@@ -17,6 +17,7 @@ export default new Vuex.Store({
         notifications: true,
         noInternet: false,
         showOnboarding: false,
+        lastDuelHash: '',
     },
     getters,
     mutations,

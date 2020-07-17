@@ -22,7 +22,10 @@ export default {
                 if (hashData[2] === 'c') data.vote = 'Creator';
                 if (hashData[2] === 'o') data.vote = 'Opponent';
             }
-            if (hash.length >= 8) [data.duelId] = hashData;
+            if (hash.length >= 8) {
+                [data.duelId] = hashData;
+                commit('setLastDuelHash', data.duelId);
+            }
         }
         // notifications
         const notifications = Number.parseInt(getSearch().get('vk_are_notifications_enabled'), 10) !== 0;
@@ -32,7 +35,7 @@ export default {
     async init({ state, commit, dispatch }, background) {
         const data = {
             vote: 'None',
-            duelId: '',
+            duelId: state.lastDuelHash,
         };
         if (!background) {
             VKC.init({

@@ -281,7 +281,10 @@ export default {
             this.showHelp(
                 'Отклонить вызов',
                 'Вызов будет отклонён. Продолжаем?',
-                () => this.$store.dispatch('init', true),
+                () => {
+                    this.$store.commit('setLastDuelHash', '');
+                    return this.$store.dispatch('init', true);
+                },
             );
         },
         deleteDuel() {
