@@ -240,7 +240,15 @@ export default {
                     this.$refs.challengeContainer.$el,
                     this.duel.id,
                 );
-                await VKC.send('VKWebAppShowStoryBox', storyData);
+                const [, error] = await VKC.send('VKWebAppShowStoryBox', storyData);
+                if (error) {
+                    this.$f7.toast.create({
+                        text: `Произошла ошибка: ${JSON.stringify(error)}`,
+                        position: 'center',
+                        cssClass: 'my-text-center',
+                        closeTimeout: 3500,
+                    }).open();
+                }
                 this.showDrawContainer = false;
                 this.$store.commit('setLoading', false);
             });
