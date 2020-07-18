@@ -242,12 +242,16 @@ export default {
                 );
                 const [, error] = await VKC.send('VKWebAppShowStoryBox', storyData);
                 if (error) {
-                    this.$f7.toast.create({
-                        text: `Произошла ошибка: ${JSON.stringify(error)}`,
-                        position: 'center',
-                        cssClass: 'my-text-center',
-                        closeTimeout: 3500,
-                    }).open();
+                    if (error.error_data && error.error_data.error_code === 4) {
+                        // user deny
+                    } else {
+                        this.$f7.toast.create({
+                            text: `Произошла ошибка: ${JSON.stringify(error)}`,
+                            position: 'center',
+                            cssClass: 'my-text-center',
+                            closeTimeout: 3500,
+                        }).open();
+                    }
                 }
                 this.showDrawContainer = false;
                 this.$store.commit('setLoading', false);
