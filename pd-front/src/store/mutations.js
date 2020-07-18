@@ -45,4 +45,7 @@ export default {
     setLastDuelHash(state, duelHash) {
         state.lastDuelHash = duelHash;
     },
+    setCurrentDialog(state, cDialog) {
+        state.currentDialog = cDialog;
+    },
 };

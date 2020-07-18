@@ -58,7 +58,7 @@ export default {
             VKC.subscribe((evt) => {
                 if (evt.detail && evt.detail.type === 'VKWebAppViewRestore') {
                     commit('setLoading', false);
-                    dispatch('init', true);
+                    dispatch('init', false);
                 }
             });
 
@@ -154,5 +154,19 @@ export default {
     saveOnboarding({ commit }) {
         commit('setShowOnboarding', false);
         VKC.send('VKWebAppStorageSet', { key: 'onboarded', value: '1' });
+    },
+
+    openDialog({ commit }, dialog) {
+        commit('setCurrentDialog', dialog);
+        if (window.history.state && window.history.state.view_main && window.history.state.view_main.url === '/') {
+            window.history.pushState('dialog', null);
+        }
+    },
+
+    closeDialog({ state, commit }) {
+        if (state.currentDialog && state.currentDialog.opened) {
+            state.currentDialog.close();
+            commit('setCurrentDialog', null);
+        }
     },
 };

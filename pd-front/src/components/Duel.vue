@@ -169,7 +169,7 @@ export default {
     },
     methods: {
         showHelp(title, text, onYes, okText) {
-            this.$f7.dialog.confirm(
+            const dialog = this.$f7.dialog.confirm(
                 text,
                 title,
                 async () => {
@@ -183,6 +183,7 @@ export default {
                     }).open();
                 },
             );
+            this.$store.dispatch('openDialog', dialog);
         },
         calculateTime() {
             const timeLeft = Math.floor((this.duel.timeFinish - (new Date()).getTime()) / 1000);
@@ -195,13 +196,14 @@ export default {
                 images.push(this.duel.opponent.image);
                 if (startFromOpponent) startIndex = 1;
             } else if (startFromOpponent) {
-                this.$f7.dialog.alert('Пригласите в дуэль оппонента, чтобы он загрузил фотографию по заданию.');
+                const dialog = this.$f7.dialog.alert('Пригласите в дуэль оппонента, чтобы он загрузил фотографию по заданию.');
+                this.$store.dispatch('openDialog', dialog);
                 return;
             }
             VKC.bridge().send('VKWebAppShowImages', { images, start_index: startIndex });
         },
         report() {
-            this.$f7.dialog.confirm(
+            const dialog = this.$f7.dialog.confirm(
                 'Отправить жалобу на неподобающий контент или нарушение правил в этой дуэли?',
                 'Жалоба',
                 () => {
@@ -215,6 +217,7 @@ export default {
                     }).open();
                 },
             );
+            this.$store.dispatch('openDialog', dialog);
         },
         publish() {
             this.showHelp(
@@ -298,11 +301,12 @@ export default {
             if (this.$store.notifications) return false;
             this.$store.commit('setNotifications', true);
 
-            this.$f7.dialog.confirm(
+            const dialog = this.$f7.dialog.confirm(
                 'Активируйте уведомления, чтобы узнать, когда ваш вызов примут.',
                 'Отправка вызова',
                 () => VKC.send('VKWebAppAllowNotifications', {}),
             );
+            this.$store.dispatch('openDialog', dialog);
             return true;
         },
     },

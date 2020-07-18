@@ -18,6 +18,7 @@ export default new Vuex.Store({
         noInternet: false,
         showOnboarding: false,
         lastDuelHash: '',
+        currentDialog: null,
     },
     getters,
     mutations,

@@ -24,7 +24,7 @@
                 @click="setTab(2)"
             />
         </f7-toolbar>
-        <f7-tabs class="full-height">
+        <f7-tabs>
 <!--            <f7-tab v-show="currentTab === 0" :tab-active="currentTab === 0">-->
 <!--                <tab-pantheon/>-->
 <!--            </f7-tab>-->
@@ -74,11 +74,12 @@ export default {
         async load() {
             const { message, requestNotify } = await this.$store.dispatch('init', false);
             if (requestNotify) {
-                this.$f7.dialog.confirm(
+                const dialog = this.$f7.dialog.confirm(
                     'Ваш голос засчитан. Отправить вам уведомление с результатами, когда дуэль закончится?',
                     'Голосование',
                     () => VKC.send('VKWebAppAllowNotifications', {}),
                 );
+                this.$store.dispatch('openDialog', dialog);
             } else if (message) {
                 this.toast(message);
             }
@@ -105,11 +106,16 @@ export default {
     mounted() {
         this.load();
         window.addEventListener('popstate', (e) => {
-            const idx = Number.parseInt(e.state, 10);
-            if (!Number.isNaN(idx)) {
-                this.$store.commit('setTab', idx);
-            } else if (e.state.view_main && e.state.view_main.url === '/') {
-                this.$store.commit('setTab', 1);
+            if (this.$store.state.currentDialog && this.$store.state.currentDialog.opened) {
+                this.$store.dispatch('closeDialog');
+                window.history.go(1);
+            } else {
+                const idx = Number.parseInt(e.state, 10);
+                if (!Number.isNaN(idx)) {
+                    this.$store.commit('setTab', idx);
+                } else if (e.state.view_main && e.state.view_main.url === '/') {
+                    this.$store.commit('setTab', 1);
+                }
             }
         });
     },
