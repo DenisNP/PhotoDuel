@@ -26,7 +26,7 @@ namespace PhotoDuel.Services
             var now = DateTime.Now;
             if (_lastRequests.TryGetValue(userId, out var time))
             {
-                if (time < now - new TimeSpan(0, 0, 10))
+                if (time < now - new TimeSpan(0, 0, 2))
                 {
                     _lastRequests.TryUpdate(userId, now, time);
                     return true;

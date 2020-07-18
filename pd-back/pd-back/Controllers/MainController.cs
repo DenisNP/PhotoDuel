@@ -97,8 +97,7 @@ namespace PhotoDuel.Controllers
                 req => new DuelResponse
                 {
                     Duel = _duelService.MakePublic(req.UserId, req.DuelId)
-                },
-                true
+                }
             );
         }
 
