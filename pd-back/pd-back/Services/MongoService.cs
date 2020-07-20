@@ -48,7 +48,7 @@ namespace PhotoDuel.Services
             var obj = col.AsQueryable().FirstOrDefault(x => x.Id == id);
             if (obj == null && !allowNull)
             {
-                throw new ArgumentException(
+                throw new KeyNotFoundException(
                     $"Object with Id = {id} not found in collection: {col.CollectionNamespace.CollectionName}"
                 );
             }

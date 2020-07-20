@@ -92,7 +92,7 @@ namespace PhotoDuel.Services
             // load current duel if it exists
             var currentDuel = _dbService.Collection<Duel>().FirstOrDefault(Duel.IsCurrentDuelOf(userId));
             
-            if (currentDuel != null && !currentDuel.IsPublic) throw new InvalidOperationException("There is current duel already");
+            if (currentDuel != null && !currentDuel.IsPublic) throw new InvalidOperationException("У вас уже есть текущая дуэль");
             if (photoId.Length > 300) throw new ArgumentException("PhotoId is too long");
             if (!_socialService.CheckImageUrl(image)) throw new ArgumentException("Image url is invalid");
             if (!_contentService.HasChallengeId(challengeId)) throw new ArgumentException("Wrong challengeId");
@@ -145,7 +145,7 @@ namespace PhotoDuel.Services
             
             // get current duel
             var currentDuel = _dbService.Collection<Duel>().FirstOrDefault(Duel.IsCurrentDuelOf(userId));
-            if (currentDuel != null) throw new InvalidOperationException("There is current duel already");
+            if (currentDuel != null) throw new InvalidOperationException("У вас уже есть текущая дуэль");
 
             // create new duel object
             duel.Opponent = new Duellist
@@ -178,7 +178,7 @@ namespace PhotoDuel.Services
             // current duels
             var currentDuels = _dbService.Collection<Duel>().Where(Duel.IsCurrentDuelOf(userId)).ToList();
             var hasPublic = currentDuels.Count(d => d.IsPublic) > 0;
-            if (hasPublic) throw new InvalidOperationException("There is already public duel");
+            if (hasPublic) throw new InvalidOperationException("У вас уже есть одна публичная дуэль");
             
             // load duel
             var duel = _dbService.ById<Duel>(duelId, false);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -185,7 +186,10 @@ namespace PhotoDuel.Controllers
                 {
                     _logger.LogWarning("Too many requests");
                     Response.StatusCode = 400;
-                    return Response.WriteAsync(new ErrorResponse("Too many requests").ToString());
+                    return Response.WriteAsync(
+                        new ErrorResponse("Вы вызываете запросы слишком часто, попробуйте через несколько секунд")
+                            .ToString()
+                    );
                 }
             }
             
@@ -194,9 +198,15 @@ namespace PhotoDuel.Controllers
             {
                 var response = handler(request);
                 var stringResponse = JsonConvert.SerializeObject(response, Utils.ConverterSettings);
-            
+
                 _logger.LogInformation($"RESPONSE:\n{stringResponse}");
                 return Response.WriteAsync(stringResponse);
+            }
+            catch (KeyNotFoundException e)
+            {
+                _logger.LogWarning(e.Message);
+                Response.StatusCode = 400;
+                return Response.WriteAsync(new ErrorResponse("Такой дуэли больше нет").ToString()); // TODO error codes
             }
             catch (Exception e)
             {
