@@ -131,12 +131,17 @@ namespace PhotoDuel.Services
             var user = _dbService.ById<User>(userId, false);
             // load duel
             var duel = _dbService.ById<Duel>(duelId);
-            // check if duel already has opponent
-            if (duel == null || duel.Opponent != null)
-            {
-                return null;
-            }
             
+            // check if duel doesnt exist or already has an opponent
+            if (duel == null)
+            {
+                throw new InvalidOperationException("Дуэль удалена");
+            }
+            if (duel.Opponent != null)
+            {
+                throw new InvalidOperationException("Дуэль уже принята");
+            }
+
             // check image
             if (photoId.Length > 300) throw new ArgumentException("PhotoId is too long");
             if (!_socialService.CheckImageUrl(image)) throw new ArgumentException("Image url is invalid");
