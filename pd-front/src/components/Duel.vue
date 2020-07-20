@@ -196,7 +196,10 @@ export default {
                 images.push(this.duel.opponent.image);
                 if (startFromOpponent) startIndex = 1;
             } else if (startFromOpponent) {
-                const dialog = this.$f7.dialog.alert('Пригласите в дуэль оппонента, чтобы он загрузил фотографию по заданию.');
+                const message = this.isMine
+                    ? 'Пригласите в дуэль оппонента, чтобы он загрузил фотографию по заданию.'
+                    : 'Вас пригласили на фото-дуэль, загрузите свою фотографию по заданию.';
+                const dialog = this.$f7.dialog.alert(message);
                 this.$store.dispatch('openDialog', dialog);
                 return;
             }
