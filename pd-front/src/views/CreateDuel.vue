@@ -125,14 +125,12 @@ export default {
                 size: { width: 750, height: 750 },
                 format: 'jpeg',
             });
-            const created = await this.$store.dispatch('createDuel', {
+            await this.$store.dispatch('createDuel', {
                 challengeId: this.challengeId,
                 duelId: this.duel && this.duel.id,
                 file,
             });
-            const duelWasDeleted = this.$store.getters
-                .challengeById(this.challengeId).categoryId === -1;
-            if (created || duelWasDeleted) this.$f7.views.main.router.back();
+            this.$f7.views.main.router.back();
         },
     },
     props: {
