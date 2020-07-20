@@ -130,7 +130,8 @@ export default {
                 duelId: this.duel && this.duel.id,
                 file,
             });
-            const duelWasDeleted = this.$store.getters(this.challengeId).categoryId === -1;
+            const duelWasDeleted = this.$store.getters
+                .challengeById(this.challengeId).categoryId === -1;
             if (created || duelWasDeleted) this.$f7.views.main.router.back();
         },
     },
