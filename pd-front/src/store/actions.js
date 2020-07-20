@@ -9,6 +9,9 @@ export default {
         if (!disableLoading) commit('setLoading', true);
         const result = await api(method, data);
         commit('setNoInternet', !result);
+        if (result && result.error) {
+            commit('setLastApiError', result.error);
+        }
         if (!disableLoading) commit('setLoading', false);
         return result;
     },

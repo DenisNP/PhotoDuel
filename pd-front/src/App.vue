@@ -91,6 +91,9 @@ export default {
         noInternet() {
             return this.$store.state.noInternet;
         },
+        lastApiError() {
+            return this.$store.state.lastApiError;
+        },
     },
     methods: {
         slideNext() {
@@ -115,6 +118,14 @@ export default {
                     closeTimeout: 3000,
                 }).open();
             }
+        },
+        lastApiError(newError) {
+            this.$f7.toast.create({
+                text: `Произошла ошибка: ${newError}`,
+                position: 'center',
+                cssClass: 'my-text-center',
+                closeTimeout: 3000,
+            }).open();
         },
     },
 };

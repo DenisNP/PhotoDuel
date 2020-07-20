@@ -48,4 +48,7 @@ export default {
     setCurrentDialog(state, cDialog) {
         state.currentDialog = cDialog;
     },
+    setLastApiError(state, err) {
+        state.lastApiError = err;
+    },
 };

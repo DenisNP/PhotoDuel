@@ -130,7 +130,8 @@ export default {
                 duelId: this.duel && this.duel.id,
                 file,
             });
-            if (created) this.$f7.views.main.router.back();
+            const duelWasDeleted = this.challengeId === -1;
+            if (created || duelWasDeleted) this.$f7.views.main.router.back();
         },
     },
     props: {
