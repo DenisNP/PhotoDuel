@@ -91,5 +91,10 @@ namespace PhotoDuel
             list.RemoveRange(0, Math.Min(count, list.Count));
             return items;
         }
+
+        public static string SafeSubstring(this string s, int len, string postfix = "...")
+        {
+            return s.Length <= len ? s : (s.Substring(0, len) + postfix);
+        }
     }
 }

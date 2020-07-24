@@ -168,7 +168,7 @@ namespace PhotoDuel.Controllers
             using var reader = new StreamReader(Request.Body);
             var body = reader.ReadToEnd();
             
-            _logger.LogInformation($"REQUEST:\n{body}");
+            _logger.LogInformation($"REQUEST {typeof(TRequest)}:\n{body}");
             var request = JsonConvert.DeserializeObject<TRequest>(body, Utils.ConverterSettings);
 
             // check sign
@@ -199,7 +199,7 @@ namespace PhotoDuel.Controllers
                 var response = handler(request);
                 var stringResponse = JsonConvert.SerializeObject(response, Utils.ConverterSettings);
 
-                _logger.LogInformation($"RESPONSE:\n{stringResponse}");
+                _logger.LogInformation($"RESPONSE:\n{stringResponse.SafeSubstring(300)}");
                 return Response.WriteAsync(stringResponse);
             }
             catch (KeyNotFoundException e)
