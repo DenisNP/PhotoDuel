@@ -5,6 +5,7 @@
         public long LastShuffle { get; set; }
         public int ShufflesLeft { get; set; }
         public int[] ChallengeIds { get; set; }
+        public bool IsBanned { get; set; } = false;
         public Duel PublicDuel { get; set; } = null;
         
         public UserMeta ToMeta()

@@ -163,6 +163,11 @@ namespace PhotoDuel.Services
         {
             var user = _dbService.ById<User>(userId) ?? new User {Id = userId};
 
+            if (user.IsBanned)
+            {
+                throw new InvalidOperationException("Вы забанены за нарушение правил публикации контента");    
+            }
+            
             var vkUser = _socialService.GetUser(userId);
             user.Name = vkUser.Name;
             user.Photo = vkUser.Photo;
