@@ -69,15 +69,17 @@ export default {
                         const reqId = d && d.request_id;
                         if (!reqId) return;
                         const duelId = reqId.split('_')[0];
+                        if (!duelId) return;
                         dispatch('api', {
                             method: 'updateStory',
                             data: {
                                 duelId,
                                 storyUrl: `https://vk.com/story${d.story_owner_id}_${d.story_id}`,
                             },
+                            disableLoading: true,
                         });
                     } catch (e) {
-                        console.log('Error story loading', e);
+                        console.log('Error story loading', e, evt);
                     }
                 }
             });
