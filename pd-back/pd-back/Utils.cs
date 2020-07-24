@@ -77,9 +77,7 @@ namespace PhotoDuel
         
         public static string ToBase64(byte[] hash)
         {
-            var base64 = Convert.ToBase64String(hash);
-            Console.WriteLine(base64);
-            return base64
+            return Convert.ToBase64String(hash)
                 .TrimEnd(new []{'='})
                 .Replace('+', '-')
                 .Replace('/', '_');
