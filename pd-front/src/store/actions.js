@@ -60,17 +60,14 @@ export default {
             // reload on restore from cache
             VKC.subscribe((evt) => {
                 if (!evt.detail) return;
-                console.log(evt);
                 if (evt.detail.type === 'VKWebAppViewRestore') {
                     commit('setLoading', false);
                     dispatch('init', false);
                 } else if (evt.detail.type === 'VKWebAppShowStoryBoxLoadFinish') {
                     try {
-                        const d = evt.detail.data;
-                        const reqId = d && d.request_id;
-                        if (!reqId) return;
-                        const duelId = reqId.split('_')[0];
+                        const duelId = state.lastStoryDuelId;
                         if (!duelId) return;
+                        const d = evt.detail.data;
                         dispatch('api', {
                             method: 'updateStory',
                             data: {
@@ -78,7 +75,7 @@ export default {
                                 storyUrl: `https://vk.com/story${d.story_owner_id}_${d.story_id}`,
                             },
                             disableLoading: true,
-                        });
+                        }); // TODO update duel object
                     } catch (e) {
                         console.log('Error story loading', e, evt);
                     }

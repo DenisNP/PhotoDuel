@@ -51,4 +51,7 @@ export default {
     setLastApiError(state, err) {
         state.lastApiError = err;
     },
+    setLastStoryDuelId(state, lastStoryDuelId) {
+        state.lastStoryDuelId = lastStoryDuelId;
+    },
 };

@@ -243,6 +243,7 @@ export default {
                     this.$refs.challengeContainer.$el,
                     this.duel.id,
                 );
+                this.$store.commit('setLastStoryDuelId', '');
                 const [, error] = await VKC.send('VKWebAppShowStoryBox', storyData);
                 if (error) {
                     if (error.error_data && error.error_data.error_code === 4) {
@@ -288,8 +289,8 @@ export default {
                     this.$refs.challengeContainer.$el,
                     this.duel.id,
                 );
+                this.$store.commit('setLastStoryDuelId', this.duel.id);
                 await VKC.send('VKWebAppShowStoryBox', storyData);
-                // TODO send story
                 this.showDrawContainer = false;
                 this.$store.commit('setLoading', false);
             });
