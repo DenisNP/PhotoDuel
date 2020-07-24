@@ -208,6 +208,11 @@ namespace PhotoDuel.Services
             {
                 throw new InvalidOperationException("This is not a participant of this duel");
             }
+
+            if (!storyUrl.StartsWith("https://vk.com/story") || storyUrl.Length > 300)
+            {
+                throw new ArgumentException("Story url is not valid");
+            }
             
             // check what user
             if (duel.Creator.User.Id == userId) duel.Creator.Story = storyUrl;
