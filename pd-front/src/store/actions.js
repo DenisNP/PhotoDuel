@@ -59,9 +59,26 @@ export default {
             dispatch('load', data);
             // reload on restore from cache
             VKC.subscribe((evt) => {
-                if (evt.detail && evt.detail.type === 'VKWebAppViewRestore') {
+                if (!evt.detail) return;
+                if (evt.detail.type === 'VKWebAppViewRestore') {
                     commit('setLoading', false);
                     dispatch('init', false);
+                } else if (evt.detail.type === 'VKWebAppShowStoryBoxLoadFinish') {
+                    try {
+                        const d = evt.detail.data;
+                        const reqId = d && d.request_id;
+                        if (!reqId) return;
+                        const duelId = reqId.split('_')[0];
+                        dispatch('api', {
+                            method: 'updateStory',
+                            data: {
+                                duelId,
+                                storyUrl: `https://vk.com/story${d.story_owner_id}_${d.story_id}`,
+                            },
+                        });
+                    } catch (e) {
+                        console.log('Error story loading', e);
+                    }
                 }
             });
 

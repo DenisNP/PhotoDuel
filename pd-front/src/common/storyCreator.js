@@ -95,6 +95,7 @@ export const createVoteStory = async (firstImgUrl, secondImgUrl, challengeElemen
     const dataUrl = await createVoteCanvas(firstImgUrl, secondImgUrl, challengeElement);
     const appId = getAppId();
     return {
+        request_id: `${duelId}_${(new Date()).getTime()}`,
         background_type: 'image',
         blob: dataUrl,
         locked: true,

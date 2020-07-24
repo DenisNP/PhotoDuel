@@ -58,14 +58,14 @@
                 Вызов друзьям
             </f7-button>
             <f7-button
-                v-if="isCreated && isMine && !duel.isPublic"
+                v-if="isCreated && isMine"
                 fill
                 class="duel-btn"
                 icon-material="share"
                 icon-size="20"
                 @click="sendLink"
             >
-                Персональный вызов
+                {{duel.isPublic ? 'Ссылка на дуэль' : 'Персональный вызов'}}
             </f7-button>
             <f7-button
                 v-if="isCreated && !isMine && !hasOtherCurrent"
