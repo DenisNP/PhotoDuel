@@ -5,7 +5,7 @@
             class="full-height"
         >
             <div class="block-text">Выберите одно из заданий</div>
-            <div class="challenge-lines">
+            <div class="challenge-lines no-flicker">
                 <challenge-line
                     :challenge-id="challengeIds[0]"
                     class="ch-line"
@@ -121,6 +121,7 @@ export default {
     .challenge-lines {
         width: 100%;
         overflow: hidden;
+        transform: translate3d(0, 0, 0);
     }
 
     .shuffle-btn {

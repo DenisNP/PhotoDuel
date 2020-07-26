@@ -284,4 +284,11 @@ export default {
     .ob-pic > img {
         width: 100%;
     }
+
+    .no-flicker {
+        transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+    }
 </style>

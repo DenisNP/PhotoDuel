@@ -1,7 +1,7 @@
 <template>
-    <div class="ch-line" :style="`--translate: ${translate};`">
+    <div class="ch-line no-flicker" :style="`--translate: ${translate};`">
         <challenge
-            class="challenge-block"
+            class="challenge-block no-flicker"
             v-for="c in allChallenges"
             :key="c.id"
             :challenge-id="c.id"
@@ -50,7 +50,7 @@ export default {
         width: 100vw;
         overflow: visible;
         /*noinspection CssUnresolvedCustomProperty*/
-        transform: translateX(var(--translate));
+        transform: translateX(var(--translate)) translate3d(0, 0, 0);
         transition: transform 3s cubic-bezier(.08,1.05,.51,1);
     }
 
