@@ -1,5 +1,5 @@
 <template>
-    <div class="ch-line no-flicker" :style="`--translate: ${translate};`">
+    <div class="ch-line challenge-line-transition no-flicker" :style="`--translate: ${translate};`">
         <challenge
             class="challenge-block no-flicker"
             v-for="c in allChallenges"
@@ -44,6 +44,14 @@ export default {
 };
 </script>
 
+<style>
+    .challenge-line-transition {
+        transition-property: transform;
+        transition-duration: 3s;
+        transition-timing-function: cubic-bezier(0.08, 1.0, 0.51, 1.0);
+    }
+</style>
+
 <style scoped>
     .ch-line {
         display: flex;
@@ -51,9 +59,6 @@ export default {
         overflow: visible;
         /*noinspection CssUnresolvedCustomProperty*/
         transform: translateX(var(--translate)) translate3d(0, 0, 0);
-        transition: transform 3s;
-        -webkit-transition-timing-function: cubic-bezier(0.08, 1.05, 0.51, 1.0);
-        transition-timing-function: cubic-bezier(0.08, 1.05, 0.51, 1.0);
     }
 
     .challenge-block {
