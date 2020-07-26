@@ -51,8 +51,9 @@ export default {
         overflow: visible;
         /*noinspection CssUnresolvedCustomProperty*/
         transform: translateX(var(--translate)) translate3d(0, 0, 0);
-        -webkit-transition: transform 3s cubic-bezier(0.08, 1.05, 0.51, 1.0);
-        transition: transform 3s cubic-bezier(0.08, 1.05, 0.51, 1.0);
+        transition: transform 3s;
+        -webkit-transition-timing-function: cubic-bezier(0.08, 1.05, 0.51, 1.0);
+        transition-timing-function: cubic-bezier(0.08, 1.05, 0.51, 1.0);
     }
 
     .challenge-block {
